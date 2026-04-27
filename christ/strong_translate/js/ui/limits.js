@@ -159,7 +159,7 @@ async function fetchGroqLimits(apiKey, model) {
     },
     body: JSON.stringify({
       model: defaultModel,
-      messages: [{ role: 'user', content: 'hi' }],
+      messages: [{ role: 'user', content: t('limits.pingMessage') }],
       max_tokens: 1
     })
   });

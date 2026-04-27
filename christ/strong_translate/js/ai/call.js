@@ -187,6 +187,11 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
   const maxTokens = parseInt(localStorage.getItem(`strong_ai_max_tokens_${provider}`) || localStorage.getItem('strong_ai_max_tokens') || '2500', 10) || 2500;
   
   try {
+    const shouldLogFullResponse = Array.isArray(messages) && messages.some((m) => {
+      if (!m || m.role !== 'user') return false;
+      const text = String(m.content || '');
+      return text.includes('G11 |');
+    });
     if (provider === 'groq') {
     const r = await fetch('https://corsproxy.io/?https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -225,6 +230,9 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
       console.log(content);
       throw new Error(t('ai.error.gibberishResponse'));
     }
+    if (shouldLogFullResponse) {
+      console.log('[AI FULL RESPONSE][groq]', content);
+    }
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo };
 
    } else if (provider === 'gemini') {
@@ -255,6 +263,9 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
        log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
      }
       const content = d.candidates[0].content.parts[0].text;
+      if (shouldLogFullResponse) {
+        console.log('[AI FULL RESPONSE][gemini]', content);
+      }
       return { content, usage: d.usageMetadata, resolvedModel: d.modelVersion || d.model || model, rateInfo: { provider: 'gemini' } };
 
      } else if (provider === 'openrouter') {
@@ -282,6 +293,9 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      validateAPIResponse(d, 'openrouter');
      const content = extractOpenRouterText(d);
      if (!content) throw new Error(t('ai.error.openrouterNoText'));
+    if (shouldLogFullResponse) {
+      console.log('[AI FULL RESPONSE][openrouter]', content);
+    }
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo: { provider: 'openrouter' } };
   }
   throw new Error(t('ai.error.unknownProvider'));

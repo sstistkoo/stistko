@@ -96,11 +96,7 @@ export function createPromptLibraryApi(deps) {
   function getSystemPromptForCurrentTask(context = 'batch') {
     let prompt = getDefaultPrompt();
     if (context === 'topic') {
-      prompt += `
-
-DODATEK PRO JEDNO TÉMA:
-- Pokud je požadováno jen jedno pole, vrať pouze hodnotu pro dané pole.
-- U pole SPECIALISTA vrať detailní souvislý odstavec 3-5 vět bez odrážek.`;
+      prompt += `\n\n${t('aiPrompts.topic.singleFieldExtra')}`;
     }
     return enforceSpecialistaFormat(prompt);
   }

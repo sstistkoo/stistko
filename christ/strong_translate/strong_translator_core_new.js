@@ -1,6 +1,7 @@
 /**
  * Strong Greek to Czech Translator - Core Module
  */
+import { SYSTEM_MESSAGE, DEFAULT_PROMPT } from './strong_prompts.js';
 
 export function parseTXT(text) {
   const lines = text.split('\n');
@@ -80,10 +81,14 @@ export function buildPromptMessages(batch) {
     const def = e.definice || e.def || '';
     return `${e.key} | ${e.greek}\nDEF: ${def}`;
   }).join('\n\n');
+  const userContent = String(DEFAULT_PROMPT || '')
+    .replace(/{TARGET_LANG}/g, 'češtiny')
+    .replace(/{SOURCE_LANG}/g, 'řečtiny/hebrejštiny')
+    .replace(/{HESLA}/g, items);
 
   return [
     { role: 'system', content: SYSTEM_MESSAGE },
-    { role: 'user', content: 'Preloz hesla:\n' + items }
+    { role: 'user', content: userContent || items }
   ];
 }
 
@@ -145,6 +150,8 @@ export function parseTranslations(raw, keys, translated = {}) {
       'MEANING': 'VYZNAM',
       'USAGE': 'POUZITI',
       'ORIGIN': 'PUVOD',
+      'ETYMOLOGY': 'PUVOD',
+      'ETYMOLOGIES': 'PUVOD',
       'COMMENTARY': 'SPECIALISTA',
       'EXEGESIS': 'SPECIALISTA',
       'KJV': 'KJV'
@@ -155,7 +162,7 @@ export function parseTranslations(raw, keys, translated = {}) {
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      const labelMatch = line.match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/i);
+      const labelMatch = line.match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|ETYMOLOGY|ETYMOLOGIES|COMMENTARY|EXEGESIS|DEF)\b\s*[-:–—=.]?\s*/i);
       if (labelMatch) {
         let label = labelMatch[1].toUpperCase();
         if (label === 'VYKLAD' || label === 'KOMENTAR' || label === 'EXEGEZE') label = 'SPECIALISTA';
@@ -208,67 +215,6 @@ export function parseTranslations(raw, keys, translated = {}) {
   return keys.filter(k => !translated[k]?.vyznam || !translated[k]?.specialista);
 }
 
-export const SYSTEM_MESSAGE = `Jsi specialista na biblistiku, koine rectinu/hebrejstinu a Strongova cisla.
-Prekladac Strongova slovniku do cestiny.
-
-Odpovez JEN v tomto formatu - NIC JINEHO:
-###G123###
-VYZNAM: [cesky]
-DEFINICE: [co nejvernejsi cesky preklad cele EN definice]
-POUZITI: [refs v hranatych zavorkach]
-PUVOD: [etymologie]
-KJV: [preklad]
-SPECIALISTA: [biblicky odborny vyklad vlastnimi slovy]
-
-PRAVIDLA PRO DEFINICE:
-- Preloz EN definici co nejpresneji, zachovej strukturu vyctu (1., 2., a), b)).
-- Zachovej zavorky, stredniky, zkratky a poznamky typu "cf.", "SYN.", "opp.", pokud jsou v predloze.
-- Nic nevynechavej ani nezjednodusuj do jedne kratke parafraze.
-- Pokud je v EN definici vice casti, preved vsechny casti do CZ ve stejnem poradi.
-- Pokud EN definice obsahuje biblicke reference v hranatych zavorkach, zachovej je i v poli DEFINICE.
-
-PRAVIDLA PRO OSTATNI POLE:
-- POUZITI: uved odkazy z EN definice jako samostatny souhrn v hranatych zavorkach.
-- PUVOD: uved konkretni puvod (jazyk + koren/slovo v puvodnim pismu, je-li dostupne), ne jen obecne "z hebrejskeho" nebo "z reckeho".
-- KJV: uved KJV ekvivalent, necopyruj zbytecne obsah z DEFINICE.
-- SPECIALISTA: 3-5 vet, pridat kontext vyznamu v biblickem uziti; nesmi to byt jen parafraze jedne kratke vety.
-
-ZAKAZY:
-- Nepiste "ZVLASTNI:" ani jine pokyny
-- "__1." nahradte cislem 1.
-- "__2." nahradte cislem 2.
-- "al." = "v dalsich mistech"
-- HODNOTY V DEFINICI: 1., 2., 3. (CISLA, ne __1.)`;
-
-export const DEFAULT_PROMPT = `Jsi specialista na biblistiku, koine rectinu/hebrejstinu a Strongova cisla.
-Preloz hesla do {TARGET_LANG} ze {SOURCE_LANG}.
-
-Vrat JEN data, bez komentaru navic. Zachovej poradi hesel.
-Pouzij pro kazde heslo presne tento format:
-###G[cislo]###
-VYZNAM: [kratky presny preklad]
-DEFINICE: [co nejvernejsi preklad cele EN definice, vcetne zavorek a cislovani]
-POUZITI: [biblicke reference v hranatych zavorkach]
-PUVOD: [etymologie: z reckeho / z hebrejskeho korene]
-KJV: [hlavni KJV preklad]
-SPECIALISTA: [souvisly odstavec 3-5 vet, bez odrazek]
-
-Pravidla normalizace a kvality:
-- "__1." a "__2." prepis na "1." a "2."
-- "al." prepis na "v dalsich mistech"
-- "indecl." preloz jako "nezmenitelny"
-- Nepis "ZVLASTNI:" ani jine instrukce
-- V DEFINICI neparafrazuj: zachovej poradi bodu, podbodu i zavorkove vlozky.
-- Nezkracuj odborny obsah: zachovej vyznam vsech casti puvodni definice (vcetne gramatickych a lexikalnich poznamek).
-- Zakaz EN zbytku v DEFINICI: preloz i kratke segmenty typu "figuratively", "metaphorically", "properly", "esp.", "lit.".
-- Pokud jsou reference [Mat./Mrk./...], zachovej je i v DEFINICI a soucasne je dej do POUZITI.
-- V PUVOD uvadej konkretni etymologii (napr. "z heb. אֲבִיָּהוּד"), ne obecne formulace.
-- SPECIALISTA nesmi byt 1 veta ani opis KJV/DEFINICE; musi pridat vecny biblicky kontext.
-- Interni QA pred odevzdanim: zkontroluj, ze zadny blok neni useknuty a posledni heslo davky je kompletni.
-
-HESLA:
-{HESLA}`;
-
 export function escHtml(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
@@ -288,5 +234,7 @@ export function validateAPIResponse(d, p) {
   }
   return true;
 }
+
+export { SYSTEM_MESSAGE, DEFAULT_PROMPT };
 
 export default { parseTXT, parseTranslations, buildPromptMessages, buildRetryMessages, SYSTEM_MESSAGE, DEFAULT_PROMPT, escHtml, validateAPIResponse };
