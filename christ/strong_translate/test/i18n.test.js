@@ -123,3 +123,25 @@ test('i18n guard: all UI languages contain all keys from cs.json', async () => {
     `Missing i18n keys detected: ${JSON.stringify(missingByLang, null, 2)}`
   );
 });
+
+test('i18n guard: UI languages do not contain extra typo keys beyond cs.json', async () => {
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const i18nDir = path.resolve(here, '../i18n');
+  const csPath = path.join(i18nDir, 'cs.json');
+  const cs = JSON.parse(await readFile(csPath, 'utf8'));
+  const baseKeys = new Set(Object.keys(cs));
+
+  const extraByLang = {};
+  for (const lang of Array.from(UI_LANGS).filter((x) => x !== 'cs')) {
+    const dictPath = path.join(i18nDir, `${lang}.json`);
+    const dict = JSON.parse(await readFile(dictPath, 'utf8'));
+    const extra = Object.keys(dict).filter((k) => !baseKeys.has(k));
+    if (extra.length) extraByLang[lang] = extra;
+  }
+
+  assert.deepEqual(
+    extraByLang,
+    {},
+    `Extra i18n keys detected: ${JSON.stringify(extraByLang, null, 2)}`
+  );
+});
