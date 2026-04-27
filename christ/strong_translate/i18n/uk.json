@@ -794,7 +794,7 @@
   "topicRepair.modal.bulkRunSelected": "⚡ Масовий переклад (вибране)",
   "topicRepair.modal.tipPauseFirst": "Порада: якщо виконується послідовне відновлення, спочатку поставте паузу — масовий запуск чекатиме, поки не завершиться поточна спроба.",
   "topicRepair.modal.topicInListTitle": "Тема в списку",
-  "topicRepair.modal.topicInListHint": "відповідно до víběUK, відображаються лише відповідні рядки (послідовні та пакетні).",
+  "topicRepair.modal.topicInListHint": "відповідно до вибору відображаються лише відповідні рядки (послідовні та пакетні).",
   "topicRepair.modal.select": "Виберіть",
   "topicRepair.modal.all": "все",
   "topicRepair.modal.allLimitTypes": "Для \"Всі\" обмежте типи тем:",
