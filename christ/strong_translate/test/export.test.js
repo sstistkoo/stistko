@@ -228,3 +228,47 @@ test('exportRange shows no-data toast when no translated items in selected range
     env.restore();
   }
 });
+
+test('exportTXT uses SK language tag when UI language is sk', async () => {
+  const env = setupDom();
+  const toasts = [];
+  const prevLocalStorage = globalThis.localStorage;
+  globalThis.localStorage = makeLocalStorageMock({ strong_ui_lang: 'sk' });
+  try {
+    const state = {
+      entries: [{ key: 'G1', greek: 'alpha', definice: 'def en', vyskyt: 'use src' }],
+      translated: { G1: { vyznam: 'vyznam sk', definice: 'def sk' } }
+    };
+    const api = makeApi(state, toasts);
+    api.exportTXT();
+    const text = await env.captured.blobs[0].text();
+    assert.match(text, /Meaning \(SK\): vyznam sk/);
+    assert.ok(toasts.includes('EXPORTED_1'));
+  } finally {
+    globalThis.localStorage = prevLocalStorage;
+    env.restore();
+  }
+});
+
+test('exportRange uses default 1-100 when prompt returns null', async () => {
+  const env = setupDom();
+  const toasts = [];
+  const prevPrompt = globalThis.prompt;
+  globalThis.prompt = () => null;
+  try {
+    const state = {
+      entries: [{ key: 'G50', greek: 'omega' }],
+      translated: { G50: { vyznam: 'm50', definice: 'd50' } }
+    };
+    const api = makeApi(state, toasts);
+    api.exportRange();
+    assert.equal(env.captured.links.length, 1);
+    assert.equal(env.captured.links[0].download, 'strong_gr_cz_G1-G100.txt');
+    const text = await env.captured.blobs[0].text();
+    assert.match(text, /G50 \| omega/);
+    assert.ok(toasts.includes('EXPORTED_RANGE_1'));
+  } finally {
+    globalThis.prompt = prevPrompt;
+    env.restore();
+  }
+});
