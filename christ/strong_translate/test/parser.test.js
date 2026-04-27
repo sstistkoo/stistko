@@ -79,3 +79,64 @@ test('parseImportJSON ignores unknown keys and empty records', () => {
   const out = parseImportJSON(input);
   assert.deepEqual(out, {});
 });
+
+test('import/export roundtrip: export-like JSON map can be reimported without field loss', () => {
+  const exportLike = {
+    G1: {
+      greek: 'alpha',
+      vyznam: 'vyznam 1',
+      definice: 'def 1',
+      pouziti: 'use 1',
+      puvod: 'origin 1',
+      specialista: 'spec 1',
+      kjv: 'kjv 1'
+    },
+    H2: {
+      greek: 'beta',
+      vyznam: 'vyznam 2',
+      definice: 'def 2',
+      pouziti: 'use 2',
+      puvod: 'origin 2',
+      specialista: 'spec 2',
+      kjv: 'kjv 2'
+    }
+  };
+  const out = parseImportJSON(JSON.stringify(exportLike));
+  assert.deepEqual(out.G1, {
+    vyznam: 'vyznam 1',
+    definice: 'def 1',
+    pouziti: 'use 1',
+    puvod: 'origin 1',
+    specialista: 'spec 1',
+    kjv: 'kjv 1'
+  });
+  assert.deepEqual(out.H2, {
+    vyznam: 'vyznam 2',
+    definice: 'def 2',
+    pouziti: 'use 2',
+    puvod: 'origin 2',
+    specialista: 'spec 2',
+    kjv: 'kjv 2'
+  });
+});
+
+test('import/export roundtrip: export-like TXT labels are parsed back', () => {
+  const input = [
+    'G50 | omega',
+    'Meaning: value txt',
+    'Definition: definition txt',
+    'Usage: usage txt',
+    'Origin: origin txt',
+    'Specialist: specialist txt',
+    'KJV translations: kjv txt'
+  ].join('\n');
+  const out = parseCzTXT(input);
+  assert.deepEqual(out.G50, {
+    vyznam: 'value txt',
+    definice: 'definition txt',
+    pouziti: 'usage txt',
+    puvod: 'origin txt',
+    specialista: 'specialist txt',
+    kjv: 'kjv txt'
+  });
+});
