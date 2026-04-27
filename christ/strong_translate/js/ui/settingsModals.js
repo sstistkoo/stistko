@@ -82,11 +82,21 @@ async function detectUiLangAvailability() {
       available: directoryFiles.has(`${String(lang.fileCode).toLowerCase()}.json`)
     }));
   } else {
-    // On hosts without directory listing (e.g. GitHub Pages), avoid noisy 404 probing.
-    const allowedUi = new Set(Array.from(UI_LANGS).map((code) => String(code || '').toLowerCase()));
-    checks = UI_LANGUAGE_CATALOG.map((lang) => ({
-      ...lang,
-      available: allowedUi.has(String(lang.code || '').toLowerCase())
+    // On hosts without directory listing (e.g. GitHub Pages), verify file existence directly.
+    checks = await Promise.all(UI_LANGUAGE_CATALOG.map(async (lang) => {
+      const fileCode = String(lang.fileCode || '').trim();
+      let available = false;
+      if (fileCode) {
+        try {
+          const res = await fetch(`./i18n/${fileCode}.json`, { cache: 'no-store' });
+          available = !!res.ok;
+        } catch {
+          available = false;
+        }
+      }
+      // Keep whitelist protection as a hard gate.
+      if (!UI_LANGS.has(String(lang.code || '').toLowerCase())) available = false;
+      return { ...lang, available };
     }));
   }
   uiLangAvailabilityCache = checks;
