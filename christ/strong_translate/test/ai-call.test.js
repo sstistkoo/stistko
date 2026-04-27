@@ -175,3 +175,102 @@ test('parseTranslations returns all keys when parser throws', () => {
     state.translated = snapTranslated;
   }
 });
+
+test('callAIWithRetry shows timeout retry toast and then succeeds', async () => {
+  globalThis.localStorage = makeLocalStorageMock();
+  let calls = 0;
+  const { api, toasts } = makeApi({
+    rateInfoFromErrorMessage: () => ({ retryAfterSec: 0 })
+  });
+  const prevFetch = globalThis.fetch;
+  const prevSetTimeout = globalThis.setTimeout;
+  globalThis.setTimeout = (fn, ms, ...args) => {
+    if (Number(ms) >= 60000) return prevSetTimeout(fn, ms, ...args);
+    fn(...args);
+    return 1;
+  };
+  globalThis.fetch = async () => {
+    calls += 1;
+    if (calls === 1) {
+      const err = new Error('Request timeout');
+      err.name = 'AbortError';
+      throw err;
+    }
+    return {
+      ok: true,
+      status: 200,
+      headers: { get: () => '' },
+      json: async () => ({
+        choices: [{ message: { content: 'OK' } }],
+        usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+        model: 'm1'
+      })
+    };
+  };
+  try {
+    const out = await api.callAIWithRetry('groq', 'k', 'm1', [{ role: 'user', content: 'x' }]);
+    assert.equal(out.content, 'OK');
+    assert.ok(toasts.some((m) => String(m).includes('toast.timeout.retryIn')));
+  } finally {
+    globalThis.fetch = prevFetch;
+    globalThis.setTimeout = prevSetTimeout;
+  }
+});
+
+test('callAIWithRetry on 503 shows service-unavailable retry toast and fails after retries', async () => {
+  globalThis.localStorage = makeLocalStorageMock();
+  const { api, toasts } = makeApi();
+  const prevFetch = globalThis.fetch;
+  const prevSetTimeout = globalThis.setTimeout;
+  globalThis.setTimeout = (fn, ms, ...args) => {
+    if (Number(ms) >= 60000) return prevSetTimeout(fn, ms, ...args);
+    fn(...args);
+    return 1;
+  };
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 503,
+    headers: { get: () => '' },
+    json: async () => ({ error: { message: 'service unavailable' } })
+  });
+  try {
+    await assert.rejects(
+      () => api.callAIWithRetry('groq', 'k', 'm1', [{ role: 'user', content: 'x' }]),
+      /service unavailable/i
+    );
+    assert.ok(toasts.some((m) => String(m).includes('toast.serviceUnavailable.retryIn')));
+  } finally {
+    globalThis.fetch = prevFetch;
+    globalThis.setTimeout = prevSetTimeout;
+  }
+});
+
+test('callAIWithRetry on 429 shows rate-limit toast and fails after retries', async () => {
+  globalThis.localStorage = makeLocalStorageMock();
+  const { api, toasts } = makeApi({
+    rateInfoFromErrorMessage: () => ({ retryAfterSec: 1 })
+  });
+  const prevFetch = globalThis.fetch;
+  const prevSetTimeout = globalThis.setTimeout;
+  globalThis.setTimeout = (fn, ms, ...args) => {
+    if (Number(ms) >= 60000) return prevSetTimeout(fn, ms, ...args);
+    fn(...args);
+    return 1;
+  };
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 429,
+    headers: { get: () => '1' },
+    json: async () => ({ error: { message: '429 rate limit' } })
+  });
+  try {
+    await assert.rejects(
+      () => api.callAIWithRetry('groq', 'k', 'm1', [{ role: 'user', content: 'x' }]),
+      /rateLimitGroq/i
+    );
+    assert.ok(toasts.some((m) => String(m).includes('toast.rateLimit.waiting')));
+  } finally {
+    globalThis.fetch = prevFetch;
+    globalThis.setTimeout = prevSetTimeout;
+  }
+});

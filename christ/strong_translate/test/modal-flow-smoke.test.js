@@ -231,3 +231,83 @@ test('settings modal flow: show and close synchronizes values and toggles class'
     globalThis.onProviderChange = prevOnProviderChange;
   }
 });
+
+test('settings persistence: saveAISettings stores values and showPromptAIModal reloads them', () => {
+  const dom = new JSDOM(`
+    <div id="promptAIModal" style="display:none"></div>
+    <input id="aiTemperature_groq" value="0.3" />
+    <input id="aiTemperature_gemini" value="0.3" />
+    <input id="aiTemperature_openrouter" value="0.3" />
+    <input id="aiMaxTokens_groq" value="2500" />
+    <input id="aiMaxTokens_gemini" value="2500" />
+    <input id="aiMaxTokens_openrouter" value="2500" />
+  `);
+  const prevWindow = globalThis.window;
+  const prevDocument = globalThis.document;
+  const prevLocalStorage = globalThis.localStorage;
+  const prevOnProviderChange = globalThis.onProviderChange;
+  globalThis.window = dom.window;
+  globalThis.document = dom.window.document;
+  globalThis.localStorage = makeLocalStorageMock();
+  globalThis.onProviderChange = () => {};
+
+  const toasts = [];
+  try {
+    const api = createSettingsModalsApi({
+      initRunSelects: () => {},
+      updateSetupCompactSummary: () => {},
+      initPipelineModelSelectors: () => {},
+      initPipelineModelSelectorsInSettingsModal: () => {},
+      showToast: (m) => toasts.push(m),
+      refreshTopicLabels: () => {},
+      renderList: () => {},
+      saveProgress: () => {},
+      refreshLanguageAwarePromptOptionLabels: () => {},
+      applySystemPromptForCurrentTask: () => {},
+      applyUiLanguage: () => {},
+      DEFAULT_UI_LANG: 'cs',
+      UI_LANGS: new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru']),
+      UI_LANG_KEY: 'strong_ui_lang',
+      setPipelineModelForProvider: () => {},
+      setPipelineSecondaryEnabled: () => {},
+      syncSecondaryProviderToggles: () => {},
+      updateAutoProviderCountdowns: () => {}
+    });
+
+    document.getElementById('aiTemperature_groq').value = '0.2';
+    document.getElementById('aiTemperature_gemini').value = '0.4';
+    document.getElementById('aiTemperature_openrouter').value = '0.6';
+    document.getElementById('aiMaxTokens_groq').value = '1200';
+    document.getElementById('aiMaxTokens_gemini').value = '1800';
+    document.getElementById('aiMaxTokens_openrouter').value = '2200';
+    api.saveAISettings();
+
+    assert.equal(localStorage.getItem('strong_ai_temperature_groq'), '0.2');
+    assert.equal(localStorage.getItem('strong_ai_temperature_gemini'), '0.4');
+    assert.equal(localStorage.getItem('strong_ai_temperature_openrouter'), '0.6');
+    assert.equal(localStorage.getItem('strong_ai_max_tokens_groq'), '1200');
+    assert.equal(localStorage.getItem('strong_ai_max_tokens_gemini'), '1800');
+    assert.equal(localStorage.getItem('strong_ai_max_tokens_openrouter'), '2200');
+    assert.equal(toasts.length, 1);
+
+    document.getElementById('aiTemperature_groq').value = '';
+    document.getElementById('aiTemperature_gemini').value = '';
+    document.getElementById('aiTemperature_openrouter').value = '';
+    document.getElementById('aiMaxTokens_groq').value = '';
+    document.getElementById('aiMaxTokens_gemini').value = '';
+    document.getElementById('aiMaxTokens_openrouter').value = '';
+
+    api.showPromptAIModal();
+    assert.equal(document.getElementById('aiTemperature_groq').value, '0.2');
+    assert.equal(document.getElementById('aiTemperature_gemini').value, '0.4');
+    assert.equal(document.getElementById('aiTemperature_openrouter').value, '0.6');
+    assert.equal(document.getElementById('aiMaxTokens_groq').value, '1200');
+    assert.equal(document.getElementById('aiMaxTokens_gemini').value, '1800');
+    assert.equal(document.getElementById('aiMaxTokens_openrouter').value, '2200');
+  } finally {
+    globalThis.window = prevWindow;
+    globalThis.document = prevDocument;
+    globalThis.localStorage = prevLocalStorage;
+    globalThis.onProviderChange = prevOnProviderChange;
+  }
+});
