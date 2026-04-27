@@ -167,7 +167,7 @@ function updateTopicRepairModalUI() {
                 ${extraTopicsForUi.map(row => `
                   <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">
                     <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · ${t('topicRepair.status')} ${escHtml(row.decision || t('topicRepair.unchanged'))}</div>
-                    <div style="margin-top:4px;color:var(--txt2)"><b>${t('topicRepair.originalShort')}</b> ${escHtml(row.previousValue || '—')}</div>
+                    <div style="margin-top:4px;color:var(--txt2)"><b>${t('topicRepair.original')}</b> ${escHtml(row.previousValue || '—')}</div>
                     <div style="margin-top:4px;color:var(--txt)"><b>${t('topicRepair.aiShort')}</b> ${escHtml(row.candidateValue || '—')}</div>
                     ${formatTopicRepairQuickCompare(row.topicId, row.previousValue, row.candidateValue)}
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">

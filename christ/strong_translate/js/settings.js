@@ -1,26 +1,9 @@
 import { PROVIDERS } from './config.js';
 import { state } from './state.js';
 import { uiLabel } from './i18n.js';
+import { safeSetLocalStorage, safeRemoveLocalStorage } from './storage.js';
 
 export function createSettingsApi({ MODEL_TEST_PINNED_MODELS, MODEL_TEST_MODEL_STORAGE_KEY, PIPELINE_SECONDARY_ENABLED_KEY, setAutoProviderEnabled }) {
-function safeSetLocalStorage(key, value) {
-  try {
-    localStorage.setItem(key, value);
-    return true;
-  } catch (err) {
-    console.warn('[settings] localStorage setItem failed:', key, err);
-    return false;
-  }
-}
-
-function safeRemoveLocalStorage(key) {
-  try {
-    localStorage.removeItem(key);
-  } catch (err) {
-    console.warn('[settings] localStorage removeItem failed:', key, err);
-  }
-}
-
 function getApiKeyForModelTest(prov) {
   const activeProvider = document.getElementById('provider')?.value || '';
   if (activeProvider === prov) {
@@ -68,7 +51,7 @@ function getPipelineModelForProvider(prov) {
   const saved = String(localStorage.getItem(PIPELINE_MODEL_STORAGE_KEY + prov) || '').trim();
   if (saved && hasStaticModel(prov, saved)) return saved;
   if (saved && !hasStaticModel(prov, saved)) {
-    safeRemoveLocalStorage(PIPELINE_MODEL_STORAGE_KEY + prov);
+    safeRemoveLocalStorage(PIPELINE_MODEL_STORAGE_KEY + prov, 'settings');
   }
   const testSelected = String(getModelTestSelectedModelForProvider(prov) || '').trim();
   if (testSelected && hasStaticModel(prov, testSelected)) return testSelected;
@@ -80,7 +63,7 @@ function getPipelineModelForProvider(prov) {
 function setPipelineModelForProvider(prov, model) {
   const val = String(model || '').trim();
   if (!val) return;
-  safeSetLocalStorage(PIPELINE_MODEL_STORAGE_KEY + prov, val);
+  safeSetLocalStorage(PIPELINE_MODEL_STORAGE_KEY + prov, val, 'settings');
 }
 
 function isPipelineSecondaryEnabled(prov) {
@@ -88,7 +71,7 @@ function isPipelineSecondaryEnabled(prov) {
 }
 
 function setPipelineSecondaryEnabled(prov, enabled) {
-  safeSetLocalStorage(PIPELINE_SECONDARY_ENABLED_KEY + prov, enabled ? '1' : '0');
+  safeSetLocalStorage(PIPELINE_SECONDARY_ENABLED_KEY + prov, enabled ? '1' : '0', 'settings');
 }
 
 function syncSecondaryProviderToggles(prov, enabled) {
@@ -192,7 +175,7 @@ function initPipelineModelSelectorsInSettingsModal() {
 function saveModelTestModelSelections() {
   ['groq', 'gemini', 'openrouter'].forEach(prov => {
     const val = String(document.getElementById(`modelTestModel_${prov}`)?.value || '').trim();
-    if (val) safeSetLocalStorage(MODEL_TEST_MODEL_STORAGE_KEY + prov, val);
+    if (val) safeSetLocalStorage(MODEL_TEST_MODEL_STORAGE_KEY + prov, val, 'settings');
   });
 }
 

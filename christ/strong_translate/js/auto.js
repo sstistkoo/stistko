@@ -1,3 +1,5 @@
+import { safeSetLocalStorage, safeRemoveLocalStorage } from './storage.js';
+
 export function createAutoApi(deps) {
   const {
     state,
@@ -68,24 +70,6 @@ export function createAutoApi(deps) {
     if (el) el.textContent = text;
   }
 
-  function safeSetLocalStorage(key, value) {
-    try {
-      localStorage.setItem(key, value);
-      return true;
-    } catch (err) {
-      console.warn('[AUTO] localStorage setItem failed:', key, err);
-      return false;
-    }
-  }
-
-  function safeRemoveLocalStorage(key) {
-    try {
-      localStorage.removeItem(key);
-    } catch (err) {
-      console.warn('[AUTO] localStorage removeItem failed:', key, err);
-    }
-  }
-
   function isAutoProviderEnabled(prov) {
     if (prov === 'gemini' || prov === 'openrouter') {
       const raw = localStorage.getItem(PIPELINE_SECONDARY_ENABLED_KEY + prov);
@@ -110,7 +94,7 @@ export function createAutoApi(deps) {
       syncSecondaryProviderToggles(prov, on);
       return;
     }
-    safeSetLocalStorage(AUTO_PROVIDER_ENABLED_KEY + prov, on ? '1' : '0');
+    safeSetLocalStorage(AUTO_PROVIDER_ENABLED_KEY + prov, on ? '1' : '0', 'AUTO');
   }
 
   function initAutoProviderToggles() {
@@ -250,11 +234,11 @@ export function createAutoApi(deps) {
     const raw = String(input.value || '').trim();
     const value = parseInt(raw, 10);
     if (!raw || Number.isNaN(value) || value <= 0) {
-      safeRemoveLocalStorage(AUTO_TOKEN_LIMIT_KEY);
+      safeRemoveLocalStorage(AUTO_TOKEN_LIMIT_KEY, 'AUTO');
       input.value = '';
     } else {
       input.value = String(value);
-      safeSetLocalStorage(AUTO_TOKEN_LIMIT_KEY, String(value));
+      safeSetLocalStorage(AUTO_TOKEN_LIMIT_KEY, String(value), 'AUTO');
     }
     refreshTokenStatsDisplay();
   }
