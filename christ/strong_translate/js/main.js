@@ -613,7 +613,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnI18nToolAiAttachJson', t('i18nTool.ai.buttons.attachJson'));
     setText('btnI18nToolAiBuildPrompt', t('i18nTool.ai.buttons.buildPrompt'));
     setText('btnI18nToolAiApplyResponse', t('i18nTool.ai.buttons.applyResponse'));
-    setText('btnI18nToolDownloadAiResult', t('i18nTool.ai.buttons.downloadOutput'));
+    setText('btnI18nToolDownloadAiResult', `${t('i18nTool.ai.buttons.downloadOutput')} (-ai-audit.json)`);
     setText('i18nToolAiBatchSizeLabel', t('i18nTool.ai.batchSize'));
     setText('i18nToolAiIntervalLabel', t('i18nTool.ai.interval'));
     setText('i18nToolAiPromptLabel', t('i18nTool.ai.promptLabel'));
@@ -3085,7 +3085,10 @@ function downloadI18nToolAiResult() {
     showToast(t('i18nTool.ai.toast.applyResponseFirst'));
     return;
   }
-  const name = i18nToolAiSourceFileName || 'ai-audit-output.json';
+  const sourceName = i18nToolAiSourceFileName || 'ai-audit-output.json';
+  const name = /-ai-audit\.json$/i.test(sourceName)
+    ? sourceName
+    : sourceName.replace(/\.json$/i, '-ai-audit.json');
   i18nToolDownloadFile(JSON.stringify(i18nToolAiWorkingJson, null, 2), name);
 }
 
