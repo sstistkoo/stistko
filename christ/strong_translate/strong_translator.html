@@ -29,7 +29,7 @@
 
   <div class="row" id="legacyProviderRow">
     <label for="provider">Provider</label>
-    <select id="provider" onchange="onProviderChange()" aria-label="Výběr AI providera">
+    <select id="provider" aria-label="Výběr AI providera">
       <option value="groq">Groq (zdarma)</option>
       <option value="gemini">Google Gemini (zdarma)</option>
       <option value="openrouter">OpenRouter - zdarma</option>
@@ -38,13 +38,13 @@
 
   <div class="row">
     <label for="apiKey" id="keyLabel">API Klíč — Groq (console.groq.com)</label>
-    <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()" aria-label="API klíč providera">
+    <input type="password" id="apiKey" placeholder="gsk_..." aria-label="API klíč providera">
     <div class="key-switch-row">
-      <select id="apiKeyProfile" onchange="onApiKeyProfileChange()" aria-label="Výběr uloženého API klíče">
+      <select id="apiKeyProfile" aria-label="Výběr uloženého API klíče">
         <option value="__manual__">Ruční klíč (aktuální pole)</option>
       </select>
-      <button class="hbtn hbtn-compact" id="btnSaveApiKeyProfile" onclick="saveCurrentApiKeyAsProfile()" title="Uložit aktuální API klíč do knihovny">💾 Uložit klíč</button>
-      <button class="hbtn red hbtn-compact" id="btnDeleteApiKeyProfile" onclick="deleteApiKeyProfile()" title="Smazat vybraný API klíč">🗑 Smazat</button>
+      <button class="hbtn hbtn-compact" id="btnSaveApiKeyProfile" title="Uložit aktuální API klíč do knihovny">💾 Uložit klíč</button>
+      <button class="hbtn red hbtn-compact" id="btnDeleteApiKeyProfile" title="Smazat vybraný API klíč">🗑 Smazat</button>
     </div>
   </div>
 
@@ -109,8 +109,8 @@
     <label for="fileTXT" id="fileLabel">txt soubor</label>
     <div class="file-row">
       <label class="file-btn" id="btnChooseFile" for="fileTXT" aria-label="Vybrat TXT soubor">📂 Vybrat</label>
-      <input type="file" id="fileTXT" class="is-hidden" accept=".txt" onchange="loadTXT(this)" aria-label="Výběr TXT souboru se Strong slovníkem">
-      <button onclick="loadDefaultFile()" id="btnLoadDefault" class="default-file-btn" aria-label="Načíst výchozí soubor">📄 Automaticky</button>
+      <input type="file" id="fileTXT" class="is-hidden" accept=".txt" aria-label="Výběr TXT souboru se Strong slovníkem">
+      <button id="btnLoadDefault" class="default-file-btn" aria-label="Načíst výchozí soubor">📄 Automaticky</button>
       <span class="file-status" id="statusTXT" aria-live="polite">— nevybráno</span>
       <span id="fileReady" class="file-ready-dot" aria-hidden="true"></span>
       <button class="start-btn" id="startBtn" onclick="startApp()" disabled aria-label="Editor">

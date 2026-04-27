@@ -4251,6 +4251,16 @@ document.addEventListener('visibilitychange', () => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('provider')?.addEventListener('change', onProviderChange);
+  document.getElementById('apiKey')?.addEventListener('change', saveApiKey);
+  document.getElementById('apiKeyProfile')?.addEventListener('change', onApiKeyProfileChange);
+  document.getElementById('btnSaveApiKeyProfile')?.addEventListener('click', saveCurrentApiKeyAsProfile);
+  document.getElementById('btnDeleteApiKeyProfile')?.addEventListener('click', deleteApiKeyProfile);
+  document.getElementById('btnLoadDefault')?.addEventListener('click', loadDefaultFile);
+  document.getElementById('fileTXT')?.addEventListener('change', (event) => {
+    loadTXT(event.currentTarget);
+  });
+
   loadSavedSettings().catch(err => {
     console.error('[i18n] Startup failed:', err);
     showToast(t('toast.error.withMessage', { message: err?.message || String(err) }));
