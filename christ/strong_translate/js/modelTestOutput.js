@@ -209,7 +209,7 @@ function openModelTestModal() {
 
 function resetModelTestModal() {
   if (state.modelTestRunning) {
-    showToast(t('toast.test.cancelFirstAlt'));
+    showToast(t('toast.test.cancelFirst'));
     return;
   }
   const output = document.getElementById('modelTestOutput');

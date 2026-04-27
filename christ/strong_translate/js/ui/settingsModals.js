@@ -1,4 +1,5 @@
 import { t, getUiLang, getDefaultContentTag, CONTENT_TAG_LANG_KEY, CONTENT_TAG_LANG_MANUAL_KEY } from '../i18n.js';
+import { safeSetLocalStorage, safeRemoveLocalStorage } from '../storage.js';
 
 export function createSettingsModalsApi({ initRunSelects, updateSetupCompactSummary, initPipelineModelSelectors, initPipelineModelSelectorsInSettingsModal, showToast, refreshTopicLabels, renderList, saveProgress, refreshLanguageAwarePromptOptionLabels, applySystemPromptForCurrentTask, applyUiLanguage, DEFAULT_UI_LANG, UI_LANGS, UI_LANG_KEY, setPipelineModelForProvider, setPipelineSecondaryEnabled, syncSecondaryProviderToggles, updateAutoProviderCountdowns }) {
 
@@ -33,24 +34,6 @@ const UI_LANGUAGE_CATALOG = [
 
 let uiLangAvailabilityCache = null;
 const I18N_TOOL_PREFILL_LANG_KEY = 'strong_i18n_tool_prefill_lang';
-
-function safeSetLocalStorage(key, value) {
-  try {
-    localStorage.setItem(key, value);
-    return true;
-  } catch (err) {
-    console.warn('[settingsModals] localStorage setItem failed:', key, err);
-    return false;
-  }
-}
-
-function safeRemoveLocalStorage(key) {
-  try {
-    localStorage.removeItem(key);
-  } catch (err) {
-    console.warn('[settingsModals] localStorage removeItem failed:', key, err);
-  }
-}
 
 async function listI18nJsonFilesFromDirectory() {
   try {
@@ -123,7 +106,7 @@ function bindUiLanguageSelectBehavior() {
     if (String(opt.dataset.available || '') === '1') return;
     const fileCode = String(opt.dataset.fileCode || '').trim();
     if (!fileCode) return;
-    safeSetLocalStorage(I18N_TOOL_PREFILL_LANG_KEY, fileCode);
+    safeSetLocalStorage(I18N_TOOL_PREFILL_LANG_KEY, fileCode, 'settingsModals');
     closePromptLangModal();
     if (typeof window.showI18nToolModal === 'function') {
       window.showI18nToolModal();
@@ -237,8 +220,8 @@ function saveAISettings() {
   ['groq', 'gemini', 'openrouter'].forEach(prov => {
     const temp = document.getElementById(`aiTemperature_${prov}`)?.value || '0.3';
     const max = document.getElementById(`aiMaxTokens_${prov}`)?.value || '2500';
-    safeSetLocalStorage(`strong_ai_temperature_${prov}`, temp);
-    safeSetLocalStorage(`strong_ai_max_tokens_${prov}`, max);
+    safeSetLocalStorage(`strong_ai_temperature_${prov}`, temp, 'settingsModals');
+    safeSetLocalStorage(`strong_ai_max_tokens_${prov}`, max, 'settingsModals');
   });
   closePromptAIModal();
   showToast(t('toast.ai.settings.saved'));
@@ -289,19 +272,19 @@ function saveLangSettings() {
   const source = document.getElementById('sourceLanguage').value;
   const uiRaw = String(document.getElementById('uiLanguage')?.value || DEFAULT_UI_LANG).toLowerCase();
   const ui = UI_LANGS.has(uiRaw) ? uiRaw : DEFAULT_UI_LANG;
-  safeSetLocalStorage('strong_target_lang', target);
-  safeSetLocalStorage('strong_source_lang', source);
-  safeSetLocalStorage(UI_LANG_KEY, ui);
+  safeSetLocalStorage('strong_target_lang', target, 'settingsModals');
+  safeSetLocalStorage('strong_source_lang', source, 'settingsModals');
+  safeSetLocalStorage(UI_LANG_KEY, ui, 'settingsModals');
   const contentTag = String(document.getElementById('contentTagLanguage')?.value || '').trim();
   const prevDefaultTag = getDefaultContentTagForTarget(prevTarget);
   const newDefaultTag = getDefaultContentTagForTarget(target);
   // Pokud uživatel nechal "výchozí" tag (typicky CZ při cíli cz), přepni ho automaticky s cílem.
   if (!contentTag || contentTag === prevDefaultTag || contentTag === newDefaultTag) {
-    safeRemoveLocalStorage(CONTENT_TAG_LANG_KEY);
-    safeRemoveLocalStorage(CONTENT_TAG_LANG_MANUAL_KEY);
+    safeRemoveLocalStorage(CONTENT_TAG_LANG_KEY, 'settingsModals');
+    safeRemoveLocalStorage(CONTENT_TAG_LANG_MANUAL_KEY, 'settingsModals');
   } else {
-    safeSetLocalStorage(CONTENT_TAG_LANG_KEY, contentTag);
-    safeSetLocalStorage(CONTENT_TAG_LANG_MANUAL_KEY, '1');
+    safeSetLocalStorage(CONTENT_TAG_LANG_KEY, contentTag, 'settingsModals');
+    safeSetLocalStorage(CONTENT_TAG_LANG_MANUAL_KEY, '1', 'settingsModals');
   }
   refreshLanguageAwarePromptOptionLabels();
   applySystemPromptForCurrentTask();

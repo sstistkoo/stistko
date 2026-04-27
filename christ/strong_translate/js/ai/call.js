@@ -3,7 +3,6 @@ import { sleep } from '../utils.js';
 import { extractOpenRouterText } from './client.js';
 import { getProviderConfiguredModelsForAI, getStaticFallbackModels } from '../../strong_translator_ai.js';
 import core from '../../strong_translator_core_new.js';
-import { getResolvedDefaultPrompt } from '../aiPromptsResolve.js';
 import { state } from '../state.js';
 
 const { validateAPIResponse } = core;
@@ -21,14 +20,6 @@ function markModelBlocked(provider, model) {
   if (!blockedModelsByProvider.has(provider)) blockedModelsByProvider.set(provider, new Set());
   blockedModelsByProvider.get(provider).add(model);
 }
-
-function resetPrompt() {
-  const p = getResolvedDefaultPrompt();
-  document.getElementById('promptEditor').value = p;
-  localStorage.setItem('strong_prompt', p);
-  updatePromptStatusIndicator();
-}
-
 
 // ══ AI VOLÁNÍ S RETRY A FALLBACK ════════════════════════════════
 function getProviderConfiguredModels(provider) {
@@ -334,5 +325,5 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     }
   }
 
-  return { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt, parseTranslations };
+  return { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, parseTranslations };
 }

@@ -88,11 +88,7 @@
   // Re-export for use in this module
 const {
       parseTXT: parseTXTCore,
-      parseTranslations: parseTranslationsCore,
-      buildPromptMessages: buildPromptMessagesCore,
       buildRetryMessages: buildRetryMessagesCore,
-      escHtml: escHtmlCore,
-      validateAPIResponse,
     } = core;
 const { MODEL_TEST_PROMPT_CATALOG: modelTestPromptCatalogFallback } = prompts;
 
@@ -667,8 +663,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     } catch (_) {}
   }
     
-   // Use core functions, but override buildPromptMessages to support custom prompts
-   // buildPromptMessagesCore is already destructured above
+  // Use core functions, but override prompt handling for custom prompt modes
    const buildRetryMessages = buildRetryMessagesCore;
    
   function enforceSpecialistaFormat(promptText) {
@@ -1612,7 +1607,7 @@ const callApi = createCallApi({
   rateInfoFromErrorMessage: (...a) => rateInfoFromErrorMessage(...a),
   parseWithOpenRouterNormalization,
 });
-const { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt, parseTranslations } = callApi;
+const { callAIWithRetry, callOnce, getTranslationEngineLabel, parseTranslations } = callApi;
 
 // ══ UI MODULY ═══════════════════════════════════════════════════
 const toastApi = createToastApi({ CONFIG, logError });
@@ -4057,7 +4052,6 @@ window.saveCurrentApiKeyAsProfile = saveCurrentApiKeyAsProfile;
 window.deleteApiKeyProfile = deleteApiKeyProfile;
 window.clearProgress = clearProgress;
 window.restoreFromBackup = restoreFromBackup;
-window.resetPrompt = resetPrompt;
 window.updateSetupCompactSummary = updateSetupCompactSummary;
 
 function clearModelTestOutput() {

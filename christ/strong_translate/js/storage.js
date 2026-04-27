@@ -1,6 +1,24 @@
 import { state } from './state.js';
 import { LEGACY_STORE_KEY, STORE_KEY_PREFIX } from './config.js';
 
+export function safeSetLocalStorage(key, value, scope = 'storage') {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (err) {
+    console.warn(`[${scope}] localStorage setItem failed:`, key, err);
+    return false;
+  }
+}
+
+export function safeRemoveLocalStorage(key, scope = 'storage') {
+  try {
+    localStorage.removeItem(key);
+  } catch (err) {
+    console.warn(`[${scope}] localStorage removeItem failed:`, key, err);
+  }
+}
+
 export function computeFileId(parsedEntries) {
   if (!parsedEntries || !parsedEntries.length) return null;
   const first = parsedEntries[0].key;
