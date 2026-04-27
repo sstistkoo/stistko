@@ -90,8 +90,18 @@ def restore_language_words(s: str, target_language_name_en: str) -> str:
 
 
 def translate_value(
-    value: Any, translator: GoogleTranslator, target_tag: str, target_language_name_en: str, path: str = ""
+    value: Any,
+    translator: GoogleTranslator,
+    target_tag: str,
+    target_language_name_en: str,
+    path: str = "",
+    *,
+    keep_prompts_en: bool = False,
+    target_lang: str = "",
 ) -> Any:
+    norm_path = path.lstrip(".")
+    if keep_prompts_en and str(target_lang).strip().lower() != "en" and norm_path.startswith("aiPrompts."):
+        return value
     if isinstance(value, str):
         if not str(value).strip():
             return value
@@ -107,9 +117,31 @@ def translate_value(
             print(f"✗ {path or '?'}: {e}", file=sys.stderr)
             return value
     if isinstance(value, dict):
-        return {k: translate_value(v, translator, target_tag, target_language_name_en, f"{path}.{k}") for k, v in value.items()}
+        return {
+            k: translate_value(
+                v,
+                translator,
+                target_tag,
+                target_language_name_en,
+                f"{path}.{k}",
+                keep_prompts_en=keep_prompts_en,
+                target_lang=target_lang,
+            )
+            for k, v in value.items()
+        }
     if isinstance(value, list):
-        return [translate_value(item, translator, target_tag, target_language_name_en, f"{path}[{i}]") for i, item in enumerate(value)]
+        return [
+            translate_value(
+                item,
+                translator,
+                target_tag,
+                target_language_name_en,
+                f"{path}[{i}]",
+                keep_prompts_en=keep_prompts_en,
+                target_lang=target_lang,
+            )
+            for i, item in enumerate(value)
+        ]
     return value
 
 
@@ -130,6 +162,11 @@ def main() -> None:
         "--tag",
         default=None,
         help="Značka v UI závorkách, např. DE nebo zh-CN. Výchozí: z --target (z velkými písmeny, zh-CN beze změny)",
+    )
+    ap.add_argument(
+        "--keep-prompts-en",
+        action="store_true",
+        help="Nechá klíče aiPrompts.* v angličtině (mimo cíl en).",
     )
     args = ap.parse_args()
 
@@ -155,7 +192,15 @@ def main() -> None:
     else:
         translator = GoogleTranslator(source=args.source, target=args.target)
     target_language_name_en = _TARGET_LANG_NAME_EN.get(str(args.target).strip().lower(), str(args.target).strip())
-    out = translate_value(data, translator, str(raw_tag), target_language_name_en, "")
+    out = translate_value(
+        data,
+        translator,
+        str(raw_tag),
+        target_language_name_en,
+        "",
+        keep_prompts_en=bool(args.keep_prompts_en),
+        target_lang=str(args.target),
+    )
     set_topic_lang_tag(out, str(raw_tag))
 
     with open(args.output, "w", encoding="utf-8") as f:

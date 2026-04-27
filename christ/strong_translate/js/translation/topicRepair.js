@@ -1173,7 +1173,11 @@ function getTopicPromptTemplate(topicId) {
   const promptType = TOPIC_PROMPT_PRESET_MAP[topicId] || '';
   const fromTopicPreset = getTopicPromptTemplateByPromptType(promptType);
   if (fromTopicPreset) return fromTopicPreset;
-  return String(localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt() || '').trim();
+  const mode = String(localStorage.getItem('strong_prompt_mode') || 'system').toLowerCase();
+  if (mode === 'custom') {
+    return String(localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt() || '').trim();
+  }
+  return String(getResolvedDefaultPrompt() || '').trim();
 }
 
 function syncTopicPromptTemplatesReport() {
@@ -1201,23 +1205,18 @@ function buildTopicPrompt(key, topicId) {
   ].filter(Boolean).join('\n');
 
   const specialistaDetailRule = topicId === 'specialista'
-    ? `
-
-POŽADAVEK NA STYL:
-- Vrať detailní exegetický odstavec (3-5 vět), jako biblický specialista.
-- Vysvětli význam slova v širším biblickém a teologickém kontextu.
-- Bez odrážek, bez číslování, bez dalších polí.`
+    ? `\n\n${t('aiPrompts.topic.specialistaStyleRule')}`
     : '';
 
   return `${enforceSpecialistaFormat(promptTemplate)}
 
 ---
-TEĎ PŘELOŽ POUZE JEDNO TÉMA.
-- Heslo: ${key}
-- Pole: ${topicLabel} (${topicId})
-- Vrať jen čistý text pro toto jedno pole bez dalších sekcí.
+${t('aiPrompts.topic.singleTopicTranslateNow')}
+- ${t('aiPrompts.topic.entryLabel')}: ${key}
+- ${t('aiPrompts.topic.fieldLabel')}: ${topicLabel} (${topicId})
+- ${t('aiPrompts.topic.returnOnlyFieldRule')}
 
-Zdrojová data:
+${t('aiPrompts.topic.sourceDataLabel')}:
 ${sourceText}
 ${specialistaDetailRule}`;
 }
@@ -1541,6 +1540,32 @@ function openSystemPromptModal(key) {
       <h3 style="margin:0 0 10px 0;color:var(--acc)">${escHtml(t('systemPrompt.title', { key }))}</h3>
       <div style="font-size:11px;color:var(--txt2);margin-bottom:8px">${t('systemPrompt.editBeforeSend')}</div>
       <textarea id="systemPromptInput" style="width:100%;min-height:240px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5"></textarea>
+      <details style="margin-top:10px;border:1px solid var(--brd);border-radius:6px;padding:8px;background:var(--bg3)">
+        <summary style="cursor:pointer;color:var(--txt2);font-size:12px">${t('systemPrompt.translator.summary')}</summary>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px">
+          <label for="systemPromptTranslateLang" style="font-size:12px;color:var(--txt2)">${t('systemPrompt.translator.language')}</label>
+          <select id="systemPromptTranslateLang" style="background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:6px">
+            <option value="cs">Čeština</option>
+            <option value="en">English</option>
+            <option value="sk">Slovenština</option>
+            <option value="pl">Polski</option>
+            <option value="de">Deutsch</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+            <option value="it">Italiano</option>
+            <option value="pt">Português</option>
+            <option value="bg">Български</option>
+            <option value="el">Ελληνικά</option>
+            <option value="he">עברית</option>
+            <option value="zh-CN">中文</option>
+          </select>
+          <button class="hbtn" type="button" id="systemPromptTranslateBtn" onclick="translateSystemPromptText()">${t('systemPrompt.translator.toResult')}</button>
+          <button class="hbtn" type="button" id="systemPromptTranslateBackBtn" onclick="translateSystemPromptBackToEnglish()">${t('systemPrompt.translator.toEnglish')}</button>
+          <button class="hbtn grn" type="button" id="systemPromptAiReviewBtn" onclick="reviewSystemPromptWithAI()">${t('systemPrompt.translator.aiReview')}</button>
+          <button class="hbtn grn" type="button" id="systemPromptAiBuildBtn" onclick="buildSystemPromptFromRequirement()">${t('systemPrompt.translator.aiBuild')}</button>
+        </div>
+        <div id="systemPromptTranslateStatus" style="margin-top:6px;font-size:11px;color:var(--txt3)"></div>
+      </details>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
         <button class="hbtn grn" id="systemPromptRunBtn" onclick="runSystemPromptAI()">${t('systemPrompt.send')}</button>
         <button class="hbtn" onclick="closeSystemPromptModal()">${t('systemPrompt.close')}</button>
@@ -1553,6 +1578,185 @@ function openSystemPromptModal(key) {
   document.body.appendChild(modal);
   const inp = document.getElementById('systemPromptInput');
   if (inp) inp.value = userText || '';
+  const uiLang = String(localStorage.getItem('strong_ui_lang') || 'cs').toLowerCase();
+  const langEl = document.getElementById('systemPromptTranslateLang');
+  if (langEl && Array.from(langEl.options).some(o => o.value === uiLang)) {
+    langEl.value = uiLang;
+  }
+}
+
+function mapPromptTranslatorTargetLang(code) {
+  const c = String(code || '').toLowerCase();
+  if (c === 'cz') return 'cs';
+  if (c === 'ch') return 'zh-CN';
+  if (c === 'sp') return 'es';
+  if (c === 'gr') return 'el';
+  return code;
+}
+
+async function translateSystemPromptText() {
+  const srcEl = document.getElementById('systemPromptInput');
+  const outEl = document.getElementById('systemPromptResult');
+  const langEl = document.getElementById('systemPromptTranslateLang');
+  const statusEl = document.getElementById('systemPromptTranslateStatus');
+  const btn = document.getElementById('systemPromptTranslateBtn');
+  if (!srcEl || !outEl || !langEl || !btn) return;
+  const text = String(srcEl.value || '').trim();
+  if (!text) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.promptEmpty');
+    return;
+  }
+  const targetRaw = String(langEl.value || 'cs');
+  const target = mapPromptTranslatorTargetLang(targetRaw);
+  btn.disabled = true;
+  if (statusEl) statusEl.textContent = `Překládám do ${target}...`;
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(target)}&dt=t&q=${encodeURIComponent(text)}`;
+    const r = await fetch(url);
+    const d = await r.json();
+    const translated = Array.isArray(d?.[0]) ? d[0].map(x => x?.[0] || '').join('') : '';
+    if (!translated.trim()) throw new Error('Prázdný výstup překladače');
+    outEl.value = translated;
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.translated', { target });
+  } catch (e) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.translateError', { message: e.message || e });
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function translateSystemPromptBackToEnglish() {
+  const srcEl = document.getElementById('systemPromptResult');
+  const outEl = document.getElementById('systemPromptInput');
+  const statusEl = document.getElementById('systemPromptTranslateStatus');
+  const btn = document.getElementById('systemPromptTranslateBackBtn');
+  if (!srcEl || !outEl || !btn) return;
+  const text = String(srcEl.value || '').trim();
+  if (!text) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.resultEmpty');
+    return;
+  }
+  btn.disabled = true;
+  if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.translatingBack');
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(text)}`;
+    const r = await fetch(url);
+    const d = await r.json();
+    const translated = Array.isArray(d?.[0]) ? d[0].map(x => x?.[0] || '').join('') : '';
+    if (!translated.trim()) throw new Error('Prázdný výstup překladače');
+    outEl.value = translated;
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.translatedBack');
+  } catch (e) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.translateError', { message: e.message || e });
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function reviewSystemPromptWithAI() {
+  if (!state.systemPromptState) return;
+  const srcEl = document.getElementById('systemPromptResult');
+  const outEl = document.getElementById('systemPromptInput');
+  const statusEl = document.getElementById('systemPromptTranslateStatus');
+  const btn = document.getElementById('systemPromptAiReviewBtn');
+  if (!srcEl || !outEl || !btn) return;
+  const fromResult = String(srcEl.value || '').trim();
+  const fromPrompt = String(outEl.value || '').trim();
+  const candidate = fromResult || fromPrompt;
+  if (!candidate) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.nothingToReview');
+    return;
+  }
+
+  const prov = resolveProviderForInteractiveAction(document.getElementById('provider').value);
+  const model = prov === (document.getElementById('provider').value || '')
+    ? document.getElementById('model').value
+    : getPipelineModelForProvider(prov);
+  const apiKey = getCurrentApiKey(prov);
+  if (!apiKey) {
+    showToast(t('toast.apiKey.enter'));
+    return;
+  }
+
+  const reviewInstruction = [
+    'You are a prompt editor. Improve the English prompt below for clarity and consistency.',
+    'Keep placeholders and parser field labels unchanged when present:',
+    '- {TARGET_LANG}, {SOURCE_LANG}, {HESLA}',
+    '- MEANING, DEFINITION, USAGE, ORIGIN, KJV, COMMENTARY',
+    'Do not add any markdown fences. Return only the revised prompt text.'
+  ].join('\n');
+
+  btn.disabled = true;
+  if (statusEl) {
+    statusEl.textContent = fromResult
+      ? t('systemPrompt.translator.status.aiReviewRunning', { provider: prov, model })
+      : t('systemPrompt.translator.status.aiReviewFallbackToTop', { provider: prov, model });
+  }
+  try {
+    const raw = await callAIWithRetry(prov, apiKey, model, [
+      { role: 'system', content: reviewInstruction },
+      { role: 'user', content: candidate }
+    ]);
+    const revised = String(raw?.content || '').trim();
+    if (!revised) throw new Error('AI vrátila prázdný výstup');
+    outEl.value = revised;
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.aiReviewDone', { provider: prov, model: raw?.resolvedModel || model });
+  } catch (e) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.aiReviewError', { message: e.message || e });
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function buildSystemPromptFromRequirement() {
+  if (!state.systemPromptState) return;
+  const reqEl = document.getElementById('systemPromptResult');
+  const outEl = document.getElementById('systemPromptInput');
+  const statusEl = document.getElementById('systemPromptTranslateStatus');
+  const btn = document.getElementById('systemPromptAiBuildBtn');
+  if (!reqEl || !outEl || !btn) return;
+  const requirement = String(reqEl.value || '').trim();
+  if (!requirement) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.requirementEmpty');
+    return;
+  }
+
+  const prov = resolveProviderForInteractiveAction(document.getElementById('provider').value);
+  const model = prov === (document.getElementById('provider').value || '')
+    ? document.getElementById('model').value
+    : getPipelineModelForProvider(prov);
+  const apiKey = getCurrentApiKey(prov);
+  if (!apiKey) {
+    showToast(t('toast.apiKey.enter'));
+    return;
+  }
+
+  const buildInstruction = [
+    'You are a prompt engineer.',
+    'Create a clean English prompt from the user requirement.',
+    'Return only the final prompt text, no commentary, no markdown fences.',
+    'When relevant, preserve parser-safe field labels and placeholders:',
+    '- MEANING, DEFINITION, USAGE, ORIGIN, KJV, COMMENTARY',
+    '- {TARGET_LANG}, {SOURCE_LANG}, {HESLA}',
+    'Keep the prompt explicit and production-ready.'
+  ].join('\n');
+
+  btn.disabled = true;
+  if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.aiBuildRunning', { provider: prov, model });
+  try {
+    const raw = await callAIWithRetry(prov, apiKey, model, [
+      { role: 'system', content: buildInstruction },
+      { role: 'user', content: requirement }
+    ]);
+    const builtPrompt = String(raw?.content || '').trim();
+    if (!builtPrompt) throw new Error('AI vrátila prázdný prompt');
+    outEl.value = builtPrompt;
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.aiBuildDone', { provider: prov, model: raw?.resolvedModel || model });
+  } catch (e) {
+    if (statusEl) statusEl.textContent = t('systemPrompt.translator.status.aiBuildError', { message: e.message || e });
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 async function runSystemPromptAI() {
@@ -1904,6 +2108,10 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
     openSystemPromptModal,
     runSystemPromptAI,
     closeSystemPromptModal,
+    translateSystemPromptText,
+    translateSystemPromptBackToEnglish,
+    reviewSystemPromptWithAI,
+    buildSystemPromptFromRequirement,
     extractTopicValueFromAI,
   };
 }

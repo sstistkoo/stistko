@@ -587,6 +587,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('i18nToolEngineOptionGoogle', t('i18nTool.engine.google'));
     setText('i18nToolEngineOptionDeepl', t('i18nTool.engine.deepl'));
     setText('i18nToolDeeplKeyLabel', t('i18nTool.deeplKey.label'));
+    setText('i18nToolKeepPromptsEnText', t('i18nTool.keepPromptsEn.label'));
     setAttr('i18nToolDeeplKey', 'placeholder', t('i18nTool.deeplKey.placeholder'));
     setText('i18nToolLangModalTitle', t('i18nTool.langModal.title'));
     setText('btnI18nToolLangCloseTop', t('lang.modal.close'));
@@ -662,7 +663,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     refreshTokenStatsDisplay();
     updatePromptLangButtonLabel();
     try {
-      rebuildPromptLibrary(localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt());
+      rebuildPromptLibrary(getActiveMainPromptTemplate('batch'));
     } catch (_) {}
   }
     
@@ -680,6 +681,13 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
 ${t('aiPrompts.enforceSpecialistaExtra')}`;
   }
 
+  function getActiveMainPromptTemplate(context = 'batch') {
+    const mode = String(localStorage.getItem('strong_prompt_mode') || 'system').toLowerCase();
+    const saved = String(localStorage.getItem('strong_prompt') || '').trim();
+    if (mode === 'custom' && saved) return saved;
+    return context === 'topic' ? getSystemPromptForCurrentTask('topic') : getResolvedDefaultPrompt();
+  }
+
   // Custom buildPromptMessages that reads from localStorage
     function buildPromptMessages(batch) {
       const items = batch.map(e => {
@@ -687,13 +695,14 @@ ${t('aiPrompts.enforceSpecialistaExtra')}`;
         return `${e.key} | ${e.greek}\nDEF: ${def}`;
       }).join('\n\n');
       
-      const userPromptTemplate = localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt();
+      const userPromptTemplate = getActiveMainPromptTemplate('batch');
       
       // Language substitution
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
-      const targetName = getPromptLanguageName(targetLang, 'target');
-      const sourceName = getPromptLanguageName(sourceLang, 'source');
+      const useEnglishNames = shouldUseEnglishLanguageNames(userPromptTemplate);
+      const targetName = useEnglishNames ? getPromptLanguageNameEnglish(targetLang, 'target') : getPromptLanguageName(targetLang, 'target');
+      const sourceName = useEnglishNames ? getPromptLanguageNameEnglish(sourceLang, 'source') : getPromptLanguageName(sourceLang, 'source');
       
       let processedPrompt = userPromptTemplate
         .replace(/{TARGET_LANG}/g, targetName)
@@ -736,7 +745,7 @@ ${t('aiPrompts.enforceSpecialistaExtra')}`;
       if (fromCatalog) return fromCatalog;
       const custom = getModelTestCustomPromptText().trim();
       if (custom) return custom;
-      return localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt();
+      return getActiveMainPromptTemplate('batch');
     }
 
     const EN_TOPIC_PROMPT_MAP = {
@@ -770,6 +779,29 @@ ${t('aiPrompts.enforceSpecialistaExtra')}`;
       };
       const fallbackKey = kind === 'source' ? 'lang.name.genitive.gr' : 'lang.name.genitive.cz';
       return t(keyMap[String(code || '').toLowerCase()] || fallbackKey);
+    }
+
+    function getPromptLanguageNameEnglish(code, kind = 'target') {
+      const map = {
+        cz: 'Czech',
+        cs: 'Czech',
+        en: 'English',
+        bg: 'Bulgarian',
+        ch: 'Chinese',
+        sp: 'Spanish',
+        sk: 'Slovak',
+        pl: 'Polish',
+        gr: 'Greek',
+        he: 'Hebrew',
+        both: 'Greek and Hebrew'
+      };
+      const fallback = kind === 'source' ? 'Greek' : 'Czech';
+      return map[String(code || '').toLowerCase()] || fallback;
+    }
+
+    function shouldUseEnglishLanguageNames(promptTemplate) {
+      const text = String(promptTemplate || '').trim();
+      return /(^|\n)\s*You are\b/i.test(text) || /\bTranslate entries from\b/i.test(text);
     }
 
     function getTopicLabelNoTag(topicId) {
@@ -858,7 +890,7 @@ function openModelTestPromptPreviewModal() {
   const isCustom = promptType === 'custom';
   const customPrompt = String(document.getElementById('modelTestCustomPromptInput')?.value || '').trim();
   const promptText = isCustom
-    ? (customPrompt || localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt())
+    ? (customPrompt || getActiveMainPromptTemplate('batch'))
     : getModelTestPromptTemplate(promptType);
   labelEl.textContent = t('prompt.preview.label', { label: getModelTestPromptTypeLabel(promptType) });
   textEl.value = String(promptText || '').trim();
@@ -905,10 +937,10 @@ async function copyModelTestPromptPreview() {
 
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
-      const targetName = getPromptLanguageName(targetLang, 'target');
-      const sourceName = getPromptLanguageName(sourceLang, 'source');
-
       const userPromptTemplate = getModelTestPromptTemplate(promptType);
+      const useEnglishNames = shouldUseEnglishLanguageNames(userPromptTemplate);
+      const targetName = useEnglishNames ? getPromptLanguageNameEnglish(targetLang, 'target') : getPromptLanguageName(targetLang, 'target');
+      const sourceName = useEnglishNames ? getPromptLanguageNameEnglish(sourceLang, 'source') : getPromptLanguageName(sourceLang, 'source');
       let processedPrompt = String(userPromptTemplate || '')
         .replace(/{TARGET_LANG}/g, targetName)
         .replace(/{SOURCE_LANG}/g, sourceName);
@@ -1764,6 +1796,7 @@ const {
   buildTopicPrompt, openTopicPromptModal, runTopicPromptAI,
   applyTopicPromptResult, shouldReplaceSpecialista, closeTopicPromptModal,
   openSystemPromptModal, runSystemPromptAI, closeSystemPromptModal,
+  translateSystemPromptText, translateSystemPromptBackToEnglish, reviewSystemPromptWithAI, buildSystemPromptFromRequirement,
   extractTopicValueFromAI,
 } = topicRepairApi;
 
@@ -2062,7 +2095,12 @@ async function loadSavedSettings() {
   setupApiKeySwitcher(prov);
   
   let p = localStorage.getItem('strong_prompt') || '';
-  if (!p.trim()) {
+  const promptMode = String(localStorage.getItem('strong_prompt_mode') || 'system').toLowerCase();
+  if (promptMode !== 'custom') {
+    p = getSystemPromptForCurrentTask('batch');
+    localStorage.setItem('strong_prompt', p);
+    localStorage.setItem('strong_prompt_mode', 'system');
+  } else if (!p.trim()) {
     p = getSystemPromptForCurrentTask('batch');
     localStorage.setItem('strong_prompt', p);
     localStorage.setItem('strong_prompt_mode', 'system');
@@ -2334,6 +2372,7 @@ let i18nToolGoogleFailureCount = 0;
 let i18nToolStrictFallbackCount = 0;
 let i18nToolRunAnimTimer = null;
 const I18N_TOOL_CANCELLED_ERROR = 'I18N_TOOL_TRANSLATION_CANCELLED';
+const I18N_TOOL_KEEP_PROMPTS_EN_KEY = 'strong_i18n_tool_keep_prompts_en';
 const i18nToolTranslatedJsonByLang = {};
 const i18nToolTranslatedTextByLang = {};
 let i18nToolAiSourceJson = null;
@@ -2660,11 +2699,15 @@ function buildI18nToolAiItems(enFlat) {
   if (!i18nToolAiSourceJson || !enFlat) return [];
   const targetFlat = i18nToolFlattenStringLeaves(i18nToolAiWorkingJson || i18nToolAiSourceJson);
   const keys = Object.keys(enFlat).sort((a, b) => a.localeCompare(b, 'cs'));
-  return keys.map((key) => ({
-    key,
-    source: String(enFlat[key] ?? ''),
-    target: String(targetFlat[key] ?? '')
-  }));
+  const targetCode = String(i18nToolAiSourceFileName || '').replace(/\.json$/i, '').toLowerCase();
+  const keepPromptsEnglish = i18nToolKeepPromptsInEnglish() && !!targetCode && targetCode !== 'en';
+  return keys
+    .filter((key) => !(keepPromptsEnglish && key.startsWith('aiPrompts.')))
+    .map((key) => ({
+      key,
+      source: String(enFlat[key] ?? ''),
+      target: String(targetFlat[key] ?? '')
+    }));
 }
 
 async function getI18nToolEnFlat() {
@@ -2733,6 +2776,7 @@ async function applyI18nToolAiResponse() {
       const key = String(row?.key || '').trim();
       const corrected = row?.corrected;
       if (!key || !validKeys.has(key)) { skipped++; continue; }
+      if (i18nToolKeepPromptsInEnglish() && targetCode !== 'en' && key.startsWith('aiPrompts.')) { skipped++; continue; }
       if (typeof corrected !== 'string') { skipped++; continue; }
       const sourceText = String(sourceEnFlat[key] ?? '');
       const sourceHasCzTag = /\(CZ\)/.test(sourceText);
@@ -3074,6 +3118,7 @@ function reopenI18nToolModalAfterDone() {
 function initI18nToolUi() {
   const engineEl = document.getElementById('i18nToolEngine');
   const deeplKeyEl = document.getElementById('i18nToolDeeplKey');
+  const keepPromptsEnEl = document.getElementById('i18nToolKeepPromptsEn');
   if (engineEl && !engineEl.dataset.bound) {
     engineEl.dataset.bound = '1';
     engineEl.addEventListener('change', updateI18nToolCommandPreview);
@@ -3082,7 +3127,25 @@ function initI18nToolUi() {
     deeplKeyEl.dataset.bound = '1';
     deeplKeyEl.addEventListener('input', updateI18nToolCommandPreview);
   }
+  if (keepPromptsEnEl) {
+    const saved = localStorage.getItem(I18N_TOOL_KEEP_PROMPTS_EN_KEY);
+    keepPromptsEnEl.checked = saved == null ? true : saved === '1';
+    if (!keepPromptsEnEl.dataset.bound) {
+      keepPromptsEnEl.dataset.bound = '1';
+      keepPromptsEnEl.addEventListener('change', () => {
+        localStorage.setItem(I18N_TOOL_KEEP_PROMPTS_EN_KEY, keepPromptsEnEl.checked ? '1' : '0');
+        updateI18nToolCommandPreview();
+      });
+    }
+  }
   renderI18nToolLanguageGrid();
+}
+
+function i18nToolKeepPromptsInEnglish() {
+  const el = document.getElementById('i18nToolKeepPromptsEn');
+  if (el) return !!el.checked;
+  const saved = localStorage.getItem(I18N_TOOL_KEEP_PROMPTS_EN_KEY);
+  return saved == null ? true : saved === '1';
 }
 
 function renderI18nToolLanguageGrid() {
@@ -3215,6 +3278,7 @@ function updateI18nToolCommandPreview() {
   if (!cmdEl) return;
   const engine = String(document.getElementById('i18nToolEngine')?.value || 'google');
   const deeplKey = String(document.getElementById('i18nToolDeeplKey')?.value || '').trim();
+  const keepPromptsEn = i18nToolKeepPromptsInEnglish();
 
   const selected = I18N_TOOL_LANGUAGES.filter((lang) => i18nToolSelectedLanguages.has(lang.code));
   if (!selected.length) {
@@ -3225,9 +3289,10 @@ function updateI18nToolCommandPreview() {
 
   const lines = selected.map((lang) => {
     const keyArg = engine === 'deepl' ? ` --deepl-key ${deeplKey || 'YOUR_DEEPL_KEY'}` : '';
-    return `python tools/translate_i18n.py -s cs -t ${lang.code} -i i18n/cs.json -o i18n/${lang.code}.json --tag ${lang.tag} --engine ${engine}${keyArg}`;
+    const keepPromptsArg = keepPromptsEn ? ' --keep-prompts-en' : '';
+    return `python tools/translate_i18n.py -s cs -t ${lang.code} -i i18n/cs.json -o i18n/${lang.code}.json --tag ${lang.tag} --engine ${engine}${keyArg}${keepPromptsArg}`;
   });
-  cmdEl.value = lines.join('\n');
+  cmdEl.value = `${lines.join('\n')}\n\n# aiPrompts.* always EN: ${keepPromptsEn ? 'ON' : 'OFF'}`;
   updateI18nToolSummary();
 }
 
@@ -3409,10 +3474,20 @@ function i18nToolCollectPlaceholderMismatches(source, translated, path = '', out
   return out;
 }
 
+function i18nToolShouldKeepPromptEnglish(path = '', targetLang = '') {
+  const keyPath = String(path || '');
+  const lang = String(targetLang || '').toLowerCase();
+  return i18nToolKeepPromptsInEnglish() && lang !== 'en' && keyPath.startsWith('aiPrompts.');
+}
+
 async function i18nToolTranslateValue(value, targetLang, targetTag, targetLanguageName, onProgress, path = '') {
   if (i18nToolCancelRequested) throw new Error(I18N_TOOL_CANCELLED_ERROR);
   if (typeof value === 'string') {
     if (!value.trim()) return value;
+    if (i18nToolShouldKeepPromptEnglish(path, targetLang)) {
+      if (typeof onProgress === 'function') onProgress(path);
+      return value;
+    }
     const protectedValue = i18nToolProtectImmutableSegments(value);
     const textToTranslate = i18nToolProtectTagsAndWords(protectedValue.text);
     let translated = await i18nToolTranslateText(textToTranslate, targetLang);
@@ -4120,6 +4195,10 @@ window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
 window.openSystemPromptModal = openSystemPromptModal;
 window.runSystemPromptAI = runSystemPromptAI;
 window.closeSystemPromptModal = closeSystemPromptModal;
+window.translateSystemPromptText = translateSystemPromptText;
+window.translateSystemPromptBackToEnglish = translateSystemPromptBackToEnglish;
+window.reviewSystemPromptWithAI = reviewSystemPromptWithAI;
+window.buildSystemPromptFromRequirement = buildSystemPromptFromRequirement;
 
 // Z modelTestUiApi
 window.cancelModelTest = cancelModelTest;
