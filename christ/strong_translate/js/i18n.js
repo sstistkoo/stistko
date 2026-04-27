@@ -2,7 +2,7 @@ import { PROVIDERS } from './config.js';
 
 export const UI_LANG_KEY = 'strong_ui_lang';
 export const DEFAULT_UI_LANG = 'cs';
-export const UI_LANGS = new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt']);
+export const UI_LANGS = new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru']);
 const FIXED_EN_KEYS = new Set([
   'detail.label.definitionEn',
   'export.field.definitionEn'
@@ -78,6 +78,9 @@ export const INLINE_UI_MESSAGES = {
   },
   pt: {
     'toast.error.withMessage': '✗ Erro: {message}'
+  },
+  ru: {
+    'toast.error.withMessage': '✗ Ошибка: {message}'
   }
 };
 
