@@ -4,7 +4,7 @@ export const UI_LANG_KEY = 'strong_ui_lang';
 export const DEFAULT_UI_LANG = 'cs';
 export const UI_LANGS = new Set([
   'cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru',
-  'da', 'fi', 'hu', 'nl', 'no', 'ro', 'sv'
+  'da', 'fi', 'hu', 'nl', 'no', 'ro', 'sv', 'ar', 'el', 'tr', 'zh-CN'
 ]);
 const FIXED_EN_KEYS = new Set([
   'detail.label.definitionEn',
@@ -22,7 +22,11 @@ const TARGET_TO_CONTENT_TAG = {
   ch: 'zh-CN',
   sp: 'ES',
   gr: 'EL',
-  he: 'HE'
+  he: 'HE',
+  ar: 'AR',
+  el: 'EL',
+  tr: 'TR',
+  'zh-cn': 'ZH_CN'
 };
 
 export const CONTENT_TAG_LANG_KEY = 'strong_content_tag_lang';
@@ -105,6 +109,18 @@ export const INLINE_UI_MESSAGES = {
   },
   sv: {
     'toast.error.withMessage': '✗ Fel: {message}'
+  },
+  ar: {
+    'toast.error.withMessage': '✗ خطأ: {message}'
+  },
+  el: {
+    'toast.error.withMessage': '✗ Σφάλμα: {message}'
+  },
+  tr: {
+    'toast.error.withMessage': '✗ Hata: {message}'
+  },
+  'zh-cn': {
+    'toast.error.withMessage': '✗ 错误: {message}'
   }
 };
 
