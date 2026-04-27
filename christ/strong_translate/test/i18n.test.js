@@ -1,5 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import {
   getDefaultContentTag,
@@ -7,7 +10,8 @@ import {
   validateUiMessages,
   getUiLang,
   consumeUiLangFallback,
-  t
+  t,
+  UI_LANGS
 } from '../js/i18n.js';
 
 function makeLocalStorageMock() {
@@ -96,4 +100,26 @@ test('validateUiMessages warns when non-default language misses keys', () => {
     console.warn = originalWarn;
   }
   assert.ok(warnings.some(w => String(w[0]).includes('Missing keys in "en"')));
+});
+
+test('i18n guard: all UI languages contain all keys from cs.json', async () => {
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const i18nDir = path.resolve(here, '../i18n');
+  const csPath = path.join(i18nDir, 'cs.json');
+  const cs = JSON.parse(await readFile(csPath, 'utf8'));
+  const baseKeys = Object.keys(cs);
+
+  const missingByLang = {};
+  for (const lang of Array.from(UI_LANGS).filter((x) => x !== 'cs')) {
+    const dictPath = path.join(i18nDir, `${lang}.json`);
+    const dict = JSON.parse(await readFile(dictPath, 'utf8'));
+    const missing = baseKeys.filter((k) => !(k in dict));
+    if (missing.length) missingByLang[lang] = missing;
+  }
+
+  assert.deepEqual(
+    missingByLang,
+    {},
+    `Missing i18n keys detected: ${JSON.stringify(missingByLang, null, 2)}`
+  );
 });
