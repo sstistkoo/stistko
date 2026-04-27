@@ -184,3 +184,47 @@ test('exportRange filters by prompt range and exports matching entries', async (
     env.restore();
   }
 });
+
+test('exportRange returns early on invalid numeric prompt input', () => {
+  const env = setupDom();
+  const toasts = [];
+  const prevPrompt = globalThis.prompt;
+  globalThis.prompt = () => 'abc';
+  try {
+    const state = {
+      entries: [{ key: 'G1', greek: 'alpha' }],
+      translated: { G1: { vyznam: 'm1', definice: 'd1' } }
+    };
+    const api = makeApi(state, toasts);
+    api.exportRange();
+    assert.equal(env.captured.links.length, 0);
+    assert.equal(toasts.length, 0);
+  } finally {
+    globalThis.prompt = prevPrompt;
+    env.restore();
+  }
+});
+
+test('exportRange shows no-data toast when no translated items in selected range', () => {
+  const env = setupDom();
+  const toasts = [];
+  const prevPrompt = globalThis.prompt;
+  let promptCalls = 0;
+  globalThis.prompt = () => {
+    promptCalls += 1;
+    return promptCalls === 1 ? '10' : '20';
+  };
+  try {
+    const state = {
+      entries: [{ key: 'G1', greek: 'alpha' }, { key: 'G2', greek: 'beta' }],
+      translated: { G1: { vyznam: 'm1', definice: 'd1' }, G2: { vyznam: 'm2', definice: 'd2' } }
+    };
+    const api = makeApi(state, toasts);
+    api.exportRange();
+    assert.equal(env.captured.links.length, 0);
+    assert.ok(toasts.includes('NO_RANGE_G10_G20'));
+  } finally {
+    globalThis.prompt = prevPrompt;
+    env.restore();
+  }
+});
