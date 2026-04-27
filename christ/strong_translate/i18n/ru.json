@@ -695,7 +695,7 @@
   "setup.batch.option.5": "5 паролей",
   "setup.batchSize": "Размер пакета (пароли на запрос)",
   "setup.batchSize.aria": "Количество паролей в пакете",
-  "setup.check.diacritics": "Эщ диакритика",
+  "setup.check.diacritics": "Проверка диакритики",
   "setup.check.diacritics.aria": "Проверьте чешские диакритические знаки в cs.json",
   "setup.check.diacritics.title": "Проверка UTF-8/диакритических знаков в cs.json",
   "setup.check.keys": "🧩 ключи i18n",
