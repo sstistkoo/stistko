@@ -704,14 +704,35 @@ ${t('aiPrompts.enforceSpecialistaExtra')}`;
         .replace(/{SOURCE_LANG}/g, sourceName);
        processedPrompt = enforceSpecialistaFormat(processedPrompt);
        
-       const userContent = processedPrompt.includes('{HESLA}') 
-         ? processedPrompt.replace(/{HESLA}/g, items)
-         : processedPrompt + '\n\n' + items;
-       
-       return [
-         { role: 'system', content: getActiveSystemMessage() },
-         { role: 'user', content: userContent }
-       ];
+        const userContent = processedPrompt.includes('{HESLA}')
+          ? processedPrompt.replace(/{HESLA}/g, items)
+          : processedPrompt + '\n\n' + items;
+
+        // ██████████████████████████████████████████████████████████████████████████
+        // █─► DEBUG LOG: Kompletní prompt odeslaný AI (kontrola formátu, tokeny)
+        // ██████████████████████████████████████████████████████████████████████████
+        console.group('🤖 PROMPT ODESLANÝ AI — batch');
+        console.log('📦 Batch size:', batch.length, 'entries');
+        console.log('🔢 Input tokens (cca):', Math.ceil(userContent.length / 4));
+        console.log('');
+        console.log('─── SYSTEM MESSAGE ───');
+        console.log(getActiveSystemMessage());
+        console.log('');
+        console.log('─── USER MESSAGE ───');
+        console.log(userContent);
+        console.log('');
+        console.log('─── ENTRIES (zkráceně) ───');
+        batch.forEach(e => {
+          const def = (e.definice || e.def || '').substring(0, 80);
+          console.log(`${e.key} | ${e.greek} | DEF: ${def}...`);
+        });
+        console.groupEnd();
+        // ██████████████████████████████████████████████████████████████████████████
+
+        return [
+          { role: 'system', content: getActiveSystemMessage() },
+          { role: 'user', content: userContent }
+        ];
     }
 
     function getModelTestPromptType() {
@@ -1818,6 +1839,7 @@ const previewApi = createPreviewApi({
   translateSingle: (...a) => translateSingle(...a),
   retranslateSingle: (...a) => retranslateSingle(...a),
   getStrongKeyNumber,
+  updateFailedCount,
 });
 const {
   showPreviewModal, toggleAllPreview, acceptPreview, discardPreview,

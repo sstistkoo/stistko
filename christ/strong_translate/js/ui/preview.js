@@ -4,7 +4,7 @@ import { escHtml } from '../utils.js';
 import { parseCzTXT, parseImportJSON } from '../parser.js';
 import { getTranslationStateForKey } from '../translation/utils.js';
 
-export function createPreviewApi({ showToast, renderList, renderDetail, saveProgress, updateStats, translateSingle, retranslateSingle, getStrongKeyNumber }) {
+export function createPreviewApi({ showToast, renderList, renderDetail, saveProgress, updateStats, translateSingle, retranslateSingle, getStrongKeyNumber, updateFailedCount }) {
 function showPreviewModal(previewData) {
   state.pendingTranslations = previewData;
   
