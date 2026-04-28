@@ -97,8 +97,11 @@ export function getContentLangTag() {
 };
   
   const uiTag = UI_TO_CONTENT_TAG[ui];
-  if (uiTag) return uiTag;
-  
+  // Pro základní UI jazyky (CS/EN/SK/PL/DE/FR/ES/IT/PT) mapujeme na odpovídající tag,
+  // pro ostatní používáme manuální nastavení, pokud existuje, jinak mapování nebo default.
+  const BASIC_UI = new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt']);
+  if (BASIC_UI.has(ui)) return uiTag || 'CZ';
+
   // Fallback to stored manual tag or default based on target language
   const stored = String(localStorage.getItem(CONTENT_TAG_LANG_KEY) || '').trim();
   const manual = localStorage.getItem(CONTENT_TAG_LANG_MANUAL_KEY) === '1';
@@ -242,6 +245,7 @@ export function validateUiMessages(messages) {
     const dict = messages[lang] || {};
     const missing = baseKeys.filter(key => !(key in dict));
     if (missing.length) {
+      console.warn(`[i18n] Missing keys in "${lang}":`, missing)
     }
   }
 }
