@@ -1754,6 +1754,7 @@ const topicRepairApi = createTopicRepairApi({
   enforceSpecialistaFormat,
   parseWithOpenRouterNormalization, applyFallbacksToParsedMap,
   isAutoProviderEnabled,
+  resolveMainBatchProvider: (...a) => resolveMainBatchProvider(...a),
   resolveProviderForInteractiveAction,
   getFailedTopicsForFallback, getMissingTopicsForRepair,
   cloneTranslationTopicFields, shouldReplaceTopicValue,
@@ -4227,8 +4228,36 @@ window.toggleAuto = toggleAuto;
 window.stopAuto = stopAuto;
 
 // Z topicRepairApi
+window.startTopicRepairFlow = startTopicRepairFlow;
+window.closeTopicRepairModalSafe = closeTopicRepairModalSafe;
+window.stopTopicRepairTicker = stopTopicRepairTicker;
+window.applyTopicRepairProviderCheckboxes = applyTopicRepairProviderCheckboxes;
+window.setTopicRepairStrategy = setTopicRepairStrategy;
+window.startTopicRepairSequentialWorker = startTopicRepairSequentialWorker;
+window.toggleTopicRepairTask = toggleTopicRepairTask;
+window.toggleTopicRepairRun = toggleTopicRepairRun;
+window.setTopicRepairSpecialistaDecision = setTopicRepairSpecialistaDecision;
+window.setTopicRepairDetectedTopicDecision = setTopicRepairDetectedTopicDecision;
+window.applyTopicRepairSelected = applyTopicRepairSelected;
+window.closeTopicRepairModalOnly = closeTopicRepairModalOnly;
+window.minimizeTopicRepairModal = minimizeTopicRepairModal;
 window.restoreTopicRepairModal = restoreTopicRepairModal;
-window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
+window.saveTopicRepairBatchPromptDraft = saveTopicRepairBatchPromptDraft;
+window.resetTopicRepairBatchPromptToDefault = resetTopicRepairBatchPromptToDefault;
+window.refreshTopicRepairBatchPromptEditor = refreshTopicRepairBatchPromptEditor;
+window.toggleTopicRepairBulkListFilter = toggleTopicRepairBulkListFilter;
+window.syncTopicRepairBulkRunInputsToHidden = syncTopicRepairBulkRunInputsToHidden;
+window.runTopicRepairBulkTranslation = runTopicRepairBulkTranslation;
+window.toggleTopicRepairBulkInclude = toggleTopicRepairBulkInclude;
+window.setTopicRepairBulkIncludeAll = setTopicRepairBulkIncludeAll;
+window.getTopicPromptTemplateByPromptType = getTopicPromptTemplateByPromptType;
+window.syncTopicPromptTemplatesReport = syncTopicPromptTemplatesReport;
+window.buildTopicPrompt = buildTopicPrompt;
+window.openTopicPromptModal = openTopicPromptModal;
+window.runTopicPromptAI = runTopicPromptAI;
+window.applyTopicPromptResult = applyTopicPromptResult;
+window.shouldReplaceSpecialista = shouldReplaceSpecialista;
+window.closeTopicPromptModal = closeTopicPromptModal;
 window.openSystemPromptModal = openSystemPromptModal;
 window.runSystemPromptAI = runSystemPromptAI;
 window.closeSystemPromptModal = closeSystemPromptModal;
@@ -4236,6 +4265,41 @@ window.translateSystemPromptText = translateSystemPromptText;
 window.translateSystemPromptBackToEnglish = translateSystemPromptBackToEnglish;
 window.reviewSystemPromptWithAI = reviewSystemPromptWithAI;
 window.buildSystemPromptFromRequirement = buildSystemPromptFromRequirement;
+window.extractTopicValueFromAI = extractTopicValueFromAI;
+window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
+window.syncTopicPromptTemplatesReport = syncTopicPromptTemplatesReport;
+window.buildTopicPrompt = buildTopicPrompt;
+window.openTopicPromptModal = openTopicPromptModal;
+window.runTopicPromptAI = runTopicPromptAI;
+window.applyTopicPromptResult = applyTopicPromptResult;
+window.shouldReplaceSpecialista = shouldReplaceSpecialista;
+window.closeTopicPromptModal = closeTopicPromptModal;
+window.openSystemPromptModal = openSystemPromptModal;
+window.runSystemPromptAI = runSystemPromptAI;
+window.closeSystemPromptModal = closeSystemPromptModal;
+window.translateSystemPromptText = translateSystemPromptText;
+window.translateSystemPromptBackToEnglish = translateSystemPromptBackToEnglish;
+window.reviewSystemPromptWithAI = reviewSystemPromptWithAI;
+window.buildSystemPromptFromRequirement = buildSystemPromptFromRequirement;
+window.extractTopicValueFromAI = extractTopicValueFromAI;
+window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
+window.setTopicRepairStrategy = setTopicRepairStrategy;
+window.refreshTopicRepairBatchPromptEditor = refreshTopicRepairBatchPromptEditor;
+window.startTopicRepairSequentialWorker = startTopicRepairSequentialWorker;
+window.toggleTopicRepairTask = toggleTopicRepairTask;
+window.toggleTopicRepairRun = toggleTopicRepairRun;
+window.setTopicRepairSpecialistaDecision = setTopicRepairSpecialistaDecision;
+window.setTopicRepairDetectedTopicDecision = setTopicRepairDetectedTopicDecision;
+window.applyTopicRepairSelected = applyTopicRepairSelected;
+window.closeTopicRepairModalOnly = closeTopicRepairModalOnly;
+window.minimizeTopicRepairModal = minimizeTopicRepairModal;
+window.saveTopicRepairBatchPromptDraft = saveTopicRepairBatchPromptDraft;
+window.resetTopicRepairBatchPromptToDefault = resetTopicRepairBatchPromptToDefault;
+window.toggleTopicRepairBulkListFilter = toggleTopicRepairBulkListFilter;
+window.syncTopicRepairBulkRunInputsToHidden = syncTopicRepairBulkRunInputsToHidden;
+window.runTopicRepairBulkTranslation = runTopicRepairBulkTranslation;
+window.toggleTopicRepairBulkInclude = toggleTopicRepairBulkInclude;
+window.setTopicRepairBulkIncludeAll = setTopicRepairBulkIncludeAll;
 
 // Z modelTestUiApi
 window.cancelModelTest = cancelModelTest;

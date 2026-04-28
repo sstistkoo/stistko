@@ -499,25 +499,24 @@ async function runParallelTopicFallback(keys, abortVersion) {
     const t = state.translated[key] || {};
     const failedTopics = getFailedTopicsForFallback(t);
     if (!failedTopics.length) return;
-    await Promise.all(failedTopics.map(async (topicId) => {
-      if (isSideFallbackAborted(abortVersion)) return;
-      let chosen = null;
-      for (const prov of sideProviders) {
-        const result = await runProviderFallbackTaskSequential(
-          prov,
-          () => requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
-        ).catch(() => null);
-        if (result) {
-          chosen = result;
-          break;
-        }
-      }
-      if (!chosen) return;
-      if (isSideFallbackAborted(abortVersion)) return;
-      state.translated[key] = state.translated[key] || {};
-      state.translated[key][topicId] = chosen.value;
-      log(`? Fallback prevzat ${key}.${topicId} <= ${chosen.prov}/${chosen.model}`);
-    }));
+     await Promise.all(failedTopics.map(async (topicId) => {
+       if (isSideFallbackAborted(abortVersion)) return;
+       // Spustit všechny enabled secondary providery paraleln?, vybrat prvního úsp?šného
+       const results = await Promise.all(
+         sideProviders.map(async (prov) => {
+           return await runProviderFallbackTaskSequential(
+             prov,
+             () => requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
+           ).catch(() => null);
+         })
+       );
+       const chosen = results.find(r => r != null) || null;
+       if (!chosen) return;
+       if (isSideFallbackAborted(abortVersion)) return;
+       state.translated[key] = state.translated[key] || {};
+       state.translated[key][topicId] = chosen.value;
+       log(`? Fallback prevzat ${key}.${topicId} <= ${chosen.prov}/${chosen.model}`);
+     }));
   }));
 }
 
@@ -525,14 +524,17 @@ function enqueueSideFallbackBackground(keys) {
   const keyList = Array.isArray(keys) ? keys.filter(Boolean) : [];
   if (!keyList.length) return;
   const abortVersion = state.sideFallbackAbortVersion;
+  // Inicializace queue pokud neexistuje
+  if (!state.sideFallbackBackgroundQueue) {
+    state.sideFallbackBackgroundQueue = Promise.resolve();
+  }
   state.sideFallbackBackgroundQueue = state.sideFallbackBackgroundQueue
     .catch(() => undefined)
     .then(async () => {
       if (isSideFallbackAborted(abortVersion)) return;
       try {
         await runParallelTopicFallback(keyList, abortVersion);
-      } catch (e) {
-      }
+      } catch (e) {}
     });
 }
 

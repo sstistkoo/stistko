@@ -365,10 +365,21 @@ export function createListApi({
       }
     }
 
-    state.selectedKeys.clear();
-    renderList();
-    updateFailedCount();
-    document.getElementById('btnTranslateSelected').textContent = t('list.translateSelected');
+     state.selectedKeys.clear();
+     renderList();
+
+     // Počkej na dokončení všech sekundárních fallbacks (Gemini/OpenRouter)
+     if (state.sideFallbackBackgroundQueue) {
+       try {
+         await state.sideFallbackBackgroundQueue;
+       } catch (e) {}
+     }
+
+     // Auto-open Topic Repair modal if any translated entries still have missing topics
+     startTopicRepairFlow(keys);
+
+     updateFailedCount();
+     document.getElementById('btnTranslateSelected').textContent = t('list.translateSelected');
 
     if (Object.keys(allNewTranslations).length > 0) {
       showPreviewModal(allNewTranslations);
