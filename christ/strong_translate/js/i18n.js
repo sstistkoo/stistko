@@ -19,15 +19,30 @@ const TARGET_TO_CONTENT_TAG = {
   en: 'EN',
   sk: 'SK',
   pl: 'PL',
+  de: 'DE',
+  fr: 'FR',
+  es: 'ES',
+  it: 'IT',
+  pt: 'PT',
+  ru: 'RU',
+  da: 'DA',
+  fi: 'FI',
+  hu: 'HU',
+  nl: 'NL',
+  no: 'NO',
+  ro: 'RO',
+  sv: 'SV',
   bg: 'BG',
   ch: 'zh-CN',
+  'zh-cn': 'ZH_CN',
   sp: 'ES',
   gr: 'EL',
   he: 'HE',
   ar: 'AR',
   el: 'EL',
   tr: 'TR',
-  'zh-cn': 'ZH_CN'
+  ja: 'JA',
+  ko: 'KO'
 };
 
 export const CONTENT_TAG_LANG_KEY = 'strong_content_tag_lang';
@@ -49,13 +64,43 @@ export function getContentLangTag() {
   if (typeof localStorage === 'undefined') return 'EN';
   // Tag v závorkách řídíme jazykem UI, aby nebyl mix (např. Definition (EN) v češtině).
   const ui = getUiLang();
-  if (ui === 'cs') return 'CZ';
-  if (ui === 'en') return 'EN';
-  if (ui === 'sk') return 'SK';
-  if (ui === 'pl') return 'PL';
+  
+  // Map UI language to content tag (brackets language)
+  const UI_TO_CONTENT_TAG = {
+    cs: 'CZ',
+    en: 'EN',
+    sk: 'SK',
+    pl: 'PL',
+    de: 'DE',
+    fr: 'FR',
+    es: 'ES',
+    it: 'IT',
+    pt: 'PT',
+    ru: 'RU',
+    da: 'DA',
+    fi: 'FI',
+    hu: 'HU',
+    nl: 'NL',
+    no: 'NO',
+    ro: 'RO',
+    sv: 'SV',
+    bg: 'BG',
+    el: 'EL',
+    ar: 'AR',
+    tr: 'TR',
+    'zh-cn': 'ZH_CN',
+    ja: 'JA',
+    ko: 'KO',
+    he: 'HE'
+  };
+  
+  const uiTag = UI_TO_CONTENT_TAG[ui];
+  if (uiTag) return uiTag;
+  
+  // Fallback to stored manual tag or default based on target language
   const stored = String(localStorage.getItem(CONTENT_TAG_LANG_KEY) || '').trim();
   const manual = localStorage.getItem(CONTENT_TAG_LANG_MANUAL_KEY) === '1';
-  // Legacy migrace: staré uložené tagy bez "manual" příznaku ignorujeme a bereme dynamický default.
+  // Legacy migration: old stored tags without "manual" flag are ignored and we use dynamic default.
   if (stored && manual) return stored;
   return getDefaultContentTag();
 }

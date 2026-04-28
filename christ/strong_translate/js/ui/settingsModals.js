@@ -237,14 +237,6 @@ async function showPromptLangModal() {
   document.getElementById('sourceLanguage').value = savedSource;
   const uiLanguageEl = document.getElementById('uiLanguage');
   if (uiLanguageEl) uiLanguageEl.value = savedUi;
-  const ct = document.getElementById('contentTagLanguage');
-  if (ct) {
-    const st = String(localStorage.getItem(CONTENT_TAG_LANG_KEY) || '').trim();
-    const def = getDefaultContentTag();
-    const want = (st && Array.from(ct.options).some(o => o.value === st)) ? st : def;
-    if (Array.from(ct.options).some(o => o.value === want)) ct.value = want;
-    else if (def && Array.from(ct.options).some(o => o.value === def)) ct.value = def;
-  }
   modal.style.display = 'flex';
   // Close on backdrop click
   modal.onclick = (e) => {
@@ -275,17 +267,8 @@ function saveLangSettings() {
   safeSetLocalStorage('strong_target_lang', target, 'settingsModals');
   safeSetLocalStorage('strong_source_lang', source, 'settingsModals');
   safeSetLocalStorage(UI_LANG_KEY, ui, 'settingsModals');
-  const contentTag = String(document.getElementById('contentTagLanguage')?.value || '').trim();
-  const prevDefaultTag = getDefaultContentTagForTarget(prevTarget);
-  const newDefaultTag = getDefaultContentTagForTarget(target);
-  // Pokud uživatel nechal "výchozí" tag (typicky CZ při cíli cz), přepni ho automaticky s cílem.
-  if (!contentTag || contentTag === prevDefaultTag || contentTag === newDefaultTag) {
-    safeRemoveLocalStorage(CONTENT_TAG_LANG_KEY, 'settingsModals');
-    safeRemoveLocalStorage(CONTENT_TAG_LANG_MANUAL_KEY, 'settingsModals');
-  } else {
-    safeSetLocalStorage(CONTENT_TAG_LANG_KEY, contentTag, 'settingsModals');
-    safeSetLocalStorage(CONTENT_TAG_LANG_MANUAL_KEY, '1', 'settingsModals');
-  }
+  safeRemoveLocalStorage(CONTENT_TAG_LANG_KEY, 'settingsModals');
+  safeRemoveLocalStorage(CONTENT_TAG_LANG_MANUAL_KEY, 'settingsModals');
   refreshLanguageAwarePromptOptionLabels();
   applySystemPromptForCurrentTask();
   applyUiLanguage();
