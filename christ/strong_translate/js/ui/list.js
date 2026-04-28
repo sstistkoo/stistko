@@ -16,71 +16,84 @@ export function createListApi({
   showToast, logError, updateFailedCount, saveProgress,
   updateStats, renderDetail
 }) {
-  function getFilteredEntries() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    const statusFilter = document.getElementById('filterStatus')?.value || 'all';
-    const sortBy = document.getElementById('filterSort')?.value || 'original';
+   function getFilteredEntries() {
+     const q = document.getElementById('searchInput').value.toLowerCase();
+     const statusFilter = document.getElementById('filterStatus')?.value || 'all';
+     const sortBy = document.getElementById('filterSort')?.value || 'original';
 
-    let lang = 'all';
-    let status = 'all';
+     let lang = 'all';
+     let status = 'all';
 
-    if (statusFilter.startsWith('g_')) {
-      lang = 'G';
-      status = statusFilter.slice(2);
-    } else if (statusFilter.startsWith('h_')) {
-      lang = 'H';
-      status = statusFilter.slice(2);
-    } else {
-      status = statusFilter;
-    }
+     if (statusFilter.startsWith('g_')) {
+       lang = 'G';
+       status = statusFilter.slice(2);
+     } else if (statusFilter.startsWith('h_')) {
+       lang = 'H';
+       status = statusFilter.slice(2);
+     } else {
+       status = statusFilter;
+     }
 
-    let filtered = state.entries.filter(e => {
-      if (state.listRangeFilter) {
-        const n = getStrongKeyNumber(e.key);
-        if (!Number.isFinite(n) || n < state.listRangeFilter.from || n > state.listRangeFilter.to) return false;
-      }
-      const matchesSearch = !q || e.key.toLowerCase().includes(q) ||
-        e.greek.toLowerCase().includes(q) || (e.definice || e.def || '').toLowerCase().includes(q);
-      if (!matchesSearch) return false;
+     // Get source language setting for filtering entries
+     const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
+     const includeG = sourceLang === 'gr' || sourceLang === 'both';
+     const includeH = sourceLang === 'he' || sourceLang === 'both';
 
-      const translationState = getTranslationStateForKey(e.key);
+     let filtered = state.entries.filter(e => {
+       if (state.listRangeFilter) {
+         const n = getStrongKeyNumber(e.key);
+         if (!Number.isFinite(n) || n < state.listRangeFilter.from || n > state.listRangeFilter.to) return false;
+       }
+       const matchesSearch = !q || e.key.toLowerCase().includes(q) ||
+         e.greek.toLowerCase().includes(q) || (e.definice || e.def || '').toLowerCase().includes(q);
+       if (!matchesSearch) return false;
 
-      if (lang === 'G' && !e.key.startsWith('G')) return false;
-      if (lang === 'H' && !e.key.startsWith('H')) return false;
+       const translationState = getTranslationStateForKey(e.key);
 
-      if (status === 'pending')       return translationState === 'pending';
-      if (status === 'done')          return translationState === 'done';
-      if (status === 'failed')        return translationState === 'failed' || translationState === 'failed_partial';
-      if (status === 'missing_topic') return translationState === 'missing_topic';
+       // Apply language filter based on statusFilter (g_ or h_)
+       if (lang === 'G' && !e.key.startsWith('G')) return false;
+       if (lang === 'H' && !e.key.startsWith('H')) return false;
 
-      return true;
-    });
+       // Apply source language filter (G/H/both)
+       const startsWithG = e.key.startsWith('G');
+       const startsWithH = e.key.startsWith('H');
+       if (!((includeG && startsWithG) || (includeH && startsWithH))) {
+         return false;
+       }
 
-    if (sortBy === 'greek') {
-      filtered.sort((a, b) => a.greek.localeCompare(b.greek));
-    } else if (sortBy === 'original') {
-      filtered.sort((a, b) => {
-        let idxA, idxB;
-        if (window._entryIndexMap?.has(a.key)) {
-          idxA = window._entryIndexMap.get(a.key);
-          idxB = window._entryIndexMap.get(b.key);
-        } else {
-          idxA = window._entryIndexMap ? state.entries.findIndex(x => x.key === a.key) : state.entries.indexOf(a);
-          idxB = window._entryIndexMap ? state.entries.findIndex(x => x.key === b.key) : state.entries.indexOf(b);
-        }
-        return idxA - idxB;
-      });
-    } else {
-      filtered.sort((a, b) => {
-        const numA = getStrongKeyNumber(a.key);
-        const numB = getStrongKeyNumber(b.key);
-        if (numA !== numB) return numA - numB;
-        return a.key.localeCompare(b.key);
-      });
-    }
+       if (status === 'pending')       return translationState === 'pending';
+       if (status === 'done')          return translationState === 'done';
+       if (status === 'failed')        return translationState === 'failed' || translationState === 'failed_partial';
+       if (status === 'missing_topic') return translationState === 'missing_topic';
 
-    return filtered;
-  }
+       return true;
+     });
+
+     if (sortBy === 'greek') {
+       filtered.sort((a, b) => a.greek.localeCompare(b.greek));
+     } else if (sortBy === 'original') {
+       filtered.sort((a, b) => {
+         let idxA, idxB;
+         if (window._entryIndexMap?.has(a.key)) {
+           idxA = window._entryIndexMap.get(a.key);
+           idxB = window._entryIndexMap.get(b.key);
+         } else {
+           idxA = window._entryIndexMap ? state.entries.findIndex(x => x.key === a.key) : state.entries.indexOf(a);
+           idxB = window._entryIndexMap ? state.entries.findIndex(x => x.key === b.key) : state.entries.indexOf(b);
+         }
+         return idxA - idxB;
+       });
+     } else {
+       filtered.sort((a, b) => {
+         const numA = getStrongKeyNumber(a.key);
+         const numB = getStrongKeyNumber(b.key);
+         if (numA !== numB) return numA - numB;
+         return a.key.localeCompare(b.key);
+       });
+     }
+
+     return filtered;
+   }
 
   function filterMissingTopicsList() {
     const filterEl = document.getElementById('filterStatus');
