@@ -537,41 +537,25 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('promptLangModalTitle', t('lang.modal.title'));
     setText('uiLanguageLabel', t('lang.modal.ui'));
     setText('targetLanguageLabel', t('lang.modal.target'));
-    setText('sourceLanguageLabel', t('lang.modal.source'));
-    const uiLanguageEl = document.getElementById('uiLanguage');
-    if (uiLanguageEl) {
-      const uiLangByValue = {
-        cs: t('lang.option.cs'),
-        en: t('lang.option.en'),
-        sk: t('lang.option.sk'),
-        pl: t('lang.option.pl'),
-        es: t('lang.option.sp'),
-        it: 'Italiano',
-        pt: 'Português'
-      };
-      uiLanguageEl.querySelectorAll('option').forEach(opt => {
-        if (opt.dataset.dynamicUiLang === '1') return;
-        const text = uiLangByValue[String(opt.value || '')];
-        if (text) opt.textContent = text;
-      });
-    }
-    setText('contentTagLanguageLabel', t('lang.contentTag.label'));
-    setText('contentTagLanguageHint', t('lang.contentTag.hint'));
-    const ctEl = document.getElementById('contentTagLanguage');
-    if (ctEl) {
-      const ctKey = (v) => {
-        if (v === 'zh-CN') return 'lang.contentTag.val_zhCN';
-        return `lang.contentTag.val_${v}`;
-      };
-      Array.from(ctEl.options).forEach(opt => {
-        const v = String(opt.value || '');
-        if (!v) return;
-        const k = ctKey(v);
-        const txt = t(k);
-        if (txt && txt !== k) opt.textContent = txt;
-      });
-    }
-    setText('btnI18nTranslateTool', t('lang.i18nTool.button'));
+     setText('sourceLanguageLabel', t('lang.modal.source'));
+     const uiLanguageEl = document.getElementById('uiLanguage');
+     if (uiLanguageEl) {
+       const uiLangByValue = {
+         cs: t('lang.option.cs'),
+         en: t('lang.option.en'),
+         sk: t('lang.option.sk'),
+         pl: t('lang.option.pl'),
+         es: t('lang.option.sp'),
+         it: 'Italiano',
+         pt: 'Português'
+       };
+       uiLanguageEl.querySelectorAll('option').forEach(opt => {
+         if (opt.dataset.dynamicUiLang === '1') return;
+         const text = uiLangByValue[String(opt.value || '')];
+         if (text) opt.textContent = text;
+       });
+     }
+     setText('btnI18nTranslateTool', t('lang.i18nTool.button'));
     setText('btnI18nToolOpenLangModal', t('i18nTool.buttons.selectLanguages'));
     setText('btnI18nToolCopyCmd', t('i18nTool.buttons.copyCommand'));
     setText('btnI18nToolRunBrowser', t('i18nTool.buttons.translate'));

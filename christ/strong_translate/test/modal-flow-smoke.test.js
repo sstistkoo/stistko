@@ -319,7 +319,6 @@ test('lang settings: saveLangSettings stores target/source/ui and clears default
     <select id="targetLanguage"><option value="cz">cz</option><option value="en">en</option></select>
     <select id="sourceLanguage"><option value="gr">gr</option><option value="he">he</option></select>
     <select id="uiLanguage"><option value="cs">cs</option><option value="en">en</option></select>
-    <select id="contentTagLanguage"><option value="CZ">CZ</option><option value="EN">EN</option><option value="DE">DE</option></select>
   `);
   const prevWindow = globalThis.window;
   const prevDocument = globalThis.document;
@@ -330,10 +329,53 @@ test('lang settings: saveLangSettings stores target/source/ui and clears default
   globalThis.localStorage = makeLocalStorageMock({
     strong_target_lang: 'cz',
     strong_source_lang: 'gr',
-    strong_ui_lang: 'cs',
-    strong_content_tag_lang: 'CZ',
-    strong_content_tag_lang_manual: '1'
+    strong_ui_lang: 'cs'
   });
+  globalThis.onProviderChange = () => {};
+
+  const calls = { refresh: 0, prompt: 0, ui: 0 };
+  const toasts = [];
+  try {
+    const api = createSettingsModalsApi({
+      initRunSelects: () => {},
+      updateSetupCompactSummary: () => {},
+      initPipelineModelSelectors: () => {},
+      initPipelineModelSelectorsInSettingsModal: () => {},
+      showToast: (m) => toasts.push(m),
+      refreshTopicLabels: () => {},
+      renderList: () => {},
+      saveProgress: () => {},
+      refreshLanguageAwarePromptOptionLabels: () => { calls.refresh += 1; },
+      applySystemPromptForCurrentTask: () => { calls.prompt += 1; },
+      applyUiLanguage: () => { calls.ui += 1; },
+      DEFAULT_UI_LANG: 'cs',
+      UI_LANGS: new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru']),
+      UI_LANG_KEY: 'strong_ui_lang',
+      setPipelineModelForProvider: () => {},
+      setPipelineSecondaryEnabled: () => {},
+      syncSecondaryProviderToggles: () => {},
+      refreshLanguageAwarePromptOptionLabels: () => { calls.refresh += 1; },
+      applySystemPromptForCurrentTask: () => { calls.prompt += 1; },
+      applyUiLanguage: () => { calls.ui += 1; }
+    });
+    api.showPromptLangModal();
+    api.saveLangSettings();
+    expect(localStorage.getItem('strong_target_lang')).toBe('cz');
+    expect(localStorage.getItem('strong_source_lang')).toBe('gr');
+    expect(localStorage.getItem('strong_ui_lang')).toBe('cs');
+    expect(localStorage.getItem('strong_content_tag_lang')).toBeNull();
+    expect(localStorage.getItem('strong_content_tag_lang_manual')).toBeNull();
+    expect(calls.refresh).toBe(1);
+    expect(calls.prompt).toBe(1);
+    expect(calls.ui).toBe(1);
+    expect(toasts).toContainMatch(/jazyků nastaven/);
+  } finally {
+    globalThis.window = prevWindow;
+    globalThis.document = prevDocument;
+    globalThis.localStorage = prevLocalStorage;
+    globalThis.onProviderChange = prevOnProviderChange;
+  }
+});
   globalThis.onProviderChange = () => {};
 
   const calls = { refresh: 0, prompt: 0, ui: 0 };
@@ -363,7 +405,6 @@ test('lang settings: saveLangSettings stores target/source/ui and clears default
     document.getElementById('targetLanguage').value = 'en';
     document.getElementById('sourceLanguage').value = 'he';
     document.getElementById('uiLanguage').value = 'en';
-    document.getElementById('contentTagLanguage').value = 'EN';
     api.saveLangSettings();
 
     assert.equal(localStorage.getItem('strong_target_lang'), 'en');
@@ -384,14 +425,13 @@ test('lang settings: saveLangSettings stores target/source/ui and clears default
   }
 });
 
-test('lang settings: saveLangSettings stores manual content tag override when custom selected', () => {
+test('lang settings: saveLangSettings stores target/source/ui and content tag follows UI language', () => {
   const dom = new JSDOM(`
     <div id="promptLangModal" style="display:flex"></div>
     <button id="btnPromptLang"></button>
     <select id="targetLanguage"><option value="cz">cz</option><option value="en">en</option></select>
     <select id="sourceLanguage"><option value="gr">gr</option><option value="he">he</option></select>
     <select id="uiLanguage"><option value="cs">cs</option><option value="en">en</option></select>
-    <select id="contentTagLanguage"><option value="CZ">CZ</option><option value="EN">EN</option><option value="DE">DE</option></select>
   `);
   const prevWindow = globalThis.window;
   const prevDocument = globalThis.document;
@@ -406,36 +446,47 @@ test('lang settings: saveLangSettings stores manual content tag override when cu
   });
   globalThis.onProviderChange = () => {};
 
+  const calls = { refresh: 0, prompt: 0, ui: 0 };
+  const toasts = [];
   try {
     const api = createSettingsModalsApi({
       initRunSelects: () => {},
       updateSetupCompactSummary: () => {},
       initPipelineModelSelectors: () => {},
       initPipelineModelSelectorsInSettingsModal: () => {},
-      showToast: () => {},
+      showToast: (m) => toasts.push(m),
       refreshTopicLabels: () => {},
       renderList: () => {},
       saveProgress: () => {},
-      refreshLanguageAwarePromptOptionLabels: () => {},
-      applySystemPromptForCurrentTask: () => {},
-      applyUiLanguage: () => {},
+      refreshLanguageAwarePromptOptionLabels: () => { calls.refresh += 1; },
+      applySystemPromptForCurrentTask: () => { calls.prompt += 1; },
+      applyUiLanguage: () => { calls.ui += 1; },
       DEFAULT_UI_LANG: 'cs',
       UI_LANGS: new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru']),
       UI_LANG_KEY: 'strong_ui_lang',
       setPipelineModelForProvider: () => {},
       setPipelineSecondaryEnabled: () => {},
       syncSecondaryProviderToggles: () => {},
-      updateAutoProviderCountdowns: () => {}
+      refreshLanguageAwarePromptOptionLabels: () => { calls.refresh += 1; },
+      applySystemPromptForCurrentTask: () => { calls.prompt += 1; },
+      applyUiLanguage: () => { calls.ui += 1; }
     });
-
+    api.showPromptLangModal();
+    // Set values and save
     document.getElementById('targetLanguage').value = 'en';
-    document.getElementById('sourceLanguage').value = 'gr';
+    document.getElementById('sourceLanguage').value = 'he';
     document.getElementById('uiLanguage').value = 'en';
-    document.getElementById('contentTagLanguage').value = 'DE';
     api.saveLangSettings();
-
-    assert.equal(localStorage.getItem('strong_content_tag_lang'), 'DE');
-    assert.equal(localStorage.getItem('strong_content_tag_lang_manual'), '1');
+    expect(localStorage.getItem('strong_target_lang')).toBe('en');
+    expect(localStorage.getItem('strong_source_lang')).toBe('he');
+    expect(localStorage.getItem('strong_ui_lang')).toBe('en');
+    // Content tag should follow UI language (en -> EN)
+    expect(localStorage.getItem('strong_content_tag_lang')).toBeNull(); // Not stored manually
+    expect(localStorage.getItem('strong_content_tag_lang_manual')).toBeNull(); // Not stored manually
+    expect(calls.refresh).toBe(1);
+    expect(calls.prompt).toBe(1);
+    expect(calls.ui).toBe(1);
+    expect(toasts).toContainMatch(/jazyků nastaven/);
   } finally {
     globalThis.window = prevWindow;
     globalThis.document = prevDocument;
