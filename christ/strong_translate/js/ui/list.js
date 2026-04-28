@@ -282,19 +282,30 @@ export function createListApi({
     }
   }
 
-  async function translateSelected() {
-    const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
-    if (!isAutoProviderEnabled(activeProvider)) {
-      showToast(t('toast.provider.enableOne'));
-      return;
-    }
-    const keys = Array.from(state.selectedKeys);
-    if (!keys.length) return;
-    const filterStatus = document.getElementById('filterStatus')?.value || '';
-    if (filterStatus === 'missing_topic') {
-      startTopicRepairFlow(keys);
-      return;
-    }
+   async function translateSelected() {
+     const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
+     if (!isAutoProviderEnabled(activeProvider)) {
+       showToast(t('toast.provider.enableOne'));
+       return;
+     }
+     const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
+     const includeG = sourceLang === 'gr' || sourceLang === 'both';
+     const includeH = sourceLang === 'he' || sourceLang === 'both';
+     let keys = Array.from(state.selectedKeys);
+     
+     // Filter keys based on source language setting
+     keys = keys.filter(key => {
+       const startsWithG = key.startsWith('G');
+       const startsWithH = key.startsWith('H');
+       return (includeG && startsWithG) || (includeH && startsWithH);
+     });
+     
+     if (!keys.length) return;
+     const filterStatus = document.getElementById('filterStatus')?.value || '';
+     if (filterStatus === 'missing_topic') {
+       startTopicRepairFlow(keys);
+       return;
+     }
 
     const bs = parseInt(document.getElementById('batchSizeRun')?.value) || 10;
     let processed = 0;

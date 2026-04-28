@@ -211,10 +211,19 @@ function jumpToStart() {
 
 function getNextBatch(size) {
   const result = [];
+  const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
+  const includeG = sourceLang === 'gr' || sourceLang === 'both';
+  const includeH = sourceLang === 'he' || sourceLang === 'both';
+  
   for (const e of state.entries) {
     if (result.length >= size) break;
     if (!state.translated[e.key] || state.translated[e.key].skipped) {
-      result.push(e.key);
+      const startsWithG = e.key.startsWith('G');
+      const startsWithH = e.key.startsWith('H');
+      
+      if ((includeG && startsWithG) || (includeH && startsWithH)) {
+        result.push(e.key);
+      }
     }
   }
   return result;
