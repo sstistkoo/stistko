@@ -5,7 +5,7 @@ export const DEFAULT_UI_LANG = 'cs';
 export const UI_LANGS = new Set([
   'cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru',
   'da', 'fi', 'hu', 'nl', 'no', 'ro', 'sv', 'ar', 'el', 'tr', 'zh-cn',
-  'he', 'ja', 'ko'
+  'he', 'ja', 'ko', 'uk', 'bg'
 ]);
 const FIXED_EN_KEYS = new Set([
   'detail.label.definitionEn',
@@ -42,7 +42,8 @@ const TARGET_TO_CONTENT_TAG = {
   el: 'EL',
   tr: 'TR',
   ja: 'JA',
-  ko: 'KO'
+  ko: 'KO',
+  uk: 'UK'
 };
 
 export const CONTENT_TAG_LANG_KEY = 'strong_content_tag_lang';
@@ -84,15 +85,16 @@ export function getContentLangTag() {
     no: 'NO',
     ro: 'RO',
     sv: 'SV',
-    bg: 'BG',
-    el: 'EL',
-    ar: 'AR',
-    tr: 'TR',
-    'zh-cn': 'ZH_CN',
-    ja: 'JA',
-    ko: 'KO',
-    he: 'HE'
-  };
+  bg: 'BG',
+  el: 'EL',
+  ar: 'AR',
+  tr: 'TR',
+  'zh-cn': 'ZH_CN',
+  ja: 'JA',
+  ko: 'KO',
+  he: 'HE',
+  uk: 'UK'
+};
   
   const uiTag = UI_TO_CONTENT_TAG[ui];
   if (uiTag) return uiTag;
@@ -135,6 +137,12 @@ export const INLINE_UI_MESSAGES = {
   ru: {
     'toast.error.withMessage': '✗ Ошибка: {message}'
   },
+  uk: {
+    'toast.error.withMessage': '✗ Помилка: {message}'
+  },
+  bg: {
+    'toast.error.withMessage': '✗ Грешка: {message}'
+  },
   da: {
     'toast.error.withMessage': '✗ Error: {message}'
   },
@@ -176,6 +184,12 @@ export const INLINE_UI_MESSAGES = {
   },
   ko: {
     'toast.error.withMessage': '✗ Error: {message}'
+  },
+  uk: {
+    'toast.error.withMessage': '✗ Помилка: {message}'
+  },
+  bg: {
+    'toast.error.withMessage': '✗ Грешка: {message}'
   }
 };
 
