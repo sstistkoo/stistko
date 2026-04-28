@@ -210,6 +210,10 @@ export function createAutoApi(deps) {
       if (state.activeKey && state.translated[state.activeKey]) renderDetail();
       if (!state.autoRunning) return;
 
+      const done = Object.values(state.translated).filter(tr => tr && tr.vyznam && tr.vyznam !== '—').length;
+      const total = state.entries.length;
+      log(`${done}/${total}`);
+
       const delaySeconds = result?.rateLimited ? (result.cooldownSeconds || 60) : state.currentInterval;
       let remaining = delaySeconds;
       const countdown = document.getElementById('countdown');

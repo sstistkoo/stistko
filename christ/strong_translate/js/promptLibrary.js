@@ -335,7 +335,6 @@ export function createPromptLibraryApi(deps) {
         showToast(t('toast.prompts.loaded.count', { count: totalImported }));
       } catch (err) {
         showToast(t('toast.prompt.importFailed'));
-        console.error(err);
       } finally {
         input.value = '';
       }

@@ -6,7 +6,6 @@ export function safeSetLocalStorage(key, value, scope = 'storage') {
     localStorage.setItem(key, value);
     return true;
   } catch (err) {
-    console.warn(`[${scope}] localStorage setItem failed:`, key, err);
     return false;
   }
 }
@@ -15,7 +14,6 @@ export function safeRemoveLocalStorage(key, scope = 'storage') {
   try {
     localStorage.removeItem(key);
   } catch (err) {
-    console.warn(`[${scope}] localStorage removeItem failed:`, key, err);
   }
 }
 

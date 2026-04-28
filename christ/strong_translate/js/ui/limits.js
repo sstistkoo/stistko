@@ -135,8 +135,8 @@ async function fetchGroqLimits(apiKey, model) {
       headers: { 'Authorization': 'Bearer ' + apiKey }
     });
     
-    const headers = {};
-    const allHeaders = [];
+    let respHeaders = {};
+      const allHeaders = [];
     modelsRes.headers.forEach((value, name) => {
       allHeaders.push([name, value]);
       if (name.startsWith('x-ratelimit-')) {
@@ -147,7 +147,7 @@ async function fetchGroqLimits(apiKey, model) {
     if (Object.keys(headers).length > 0) {
       return { headers, errorMsg: '', status: modelsRes.status };
     }
-  } catch (e) { console.log('models err', e); }
+  } catch (e) {  }
   
   // Fallback to chat request
   const defaultModel = model || 'llama-3.1-8b-instant';
@@ -165,15 +165,15 @@ async function fetchGroqLimits(apiKey, model) {
   });
   
   // Even error responses contain rate limit headers
-  const headers = {};
-  const allHeaders = [];
+  let respHeaders = {};
+      const allHeaders = [];
   res.headers.forEach((value, name) => {
     allHeaders.push([name, value]);
     if (name.startsWith('x-ratelimit-')) {
       headers[name] = value;
     }
   });
-  headers._all = allHeaders;
+  respresprespHeaders._all = allHeaders;
   
   // Also get any error message
   let errorMsg = '';
@@ -244,7 +244,7 @@ function renderGroqLimits(result) {
   }
   
   // Debug: show all headers if nothing parsed
-  const debugHeaders = headers._all || rateLimitHeaders;
+  const debugHeaders = respresprespHeaders._all || rateLimitHeaders;
   if ( rows.length === 0 && debugHeaders.length > 0) {
     rows.push(`<div style="color:var(--ylw);font-size:10px;margin-bottom:8px">${t('limits.debug.headers')}</div>`);
     debugHeaders.slice(0, 20).forEach(([k, v]) => {
@@ -304,10 +304,10 @@ function renderOpenRouterLimits(keyData, creditsData) {
     rows.push(`<div class="limits-row"><span class="limits-label">${t('limits.limit.remaining')}</span><span class="limits-value ${cls}">$${keyData.limit_remaining?.toFixed(2) || '0'} (${pct}%)</span></div>`);
   }
   if (keyData.is_free_tier !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Free tier</span><span class="limits-value ${keyData.is_free_tier ? 'ok' : ''}">${keyData.is_free_tier ? '✓' : '—'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Free tier</span><span class="limits-value ${keyData.is_free_tier ? 'ok' : ''}">${keyData.is_free_tier ? '?' : '?'}</span></div>`);
   }
   if (keyData.label) {
-    rows.push(`<div class="limits-row"><span class="limits-label">${t('limits.key')}</span><span class="limits-value" style="font-size:10px">${keyData.label || '—'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">${t('limits.key')}</span><span class="limits-value" style="font-size:10px">${keyData.label || '?'}</span></div>`);
   }
   const known = new Set(['usage', 'usage_daily', 'usage_weekly', 'usage_monthly', 'limit', 'limit_remaining', 'is_free_tier', 'label']);
   for (const [k, v] of Object.entries(keyData || {})) {
@@ -343,3 +343,4 @@ function getOpenRouterRateLimits(keyData) {
     fetchLimits,
   };
 }
+

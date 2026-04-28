@@ -217,12 +217,9 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     // Kontrola na nesmyslnou odpověď
     const weirdChars = (content.match(/[^\x20-\x7E\n\r\těščřžýáíéúůťďňĚŠČŘŽÝÁÍÉÚŮŤĎŇ]/g) || []).length;
     if (content.length > 0 && weirdChars > content.length * 0.5) {
-      console.log(t('ai.log.suspiciousResponse'));
-      console.log(content);
       throw new Error(t('ai.error.gibberishResponse'));
     }
     if (shouldLogFullResponse) {
-      console.log('[AI FULL RESPONSE][groq]', content);
     }
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo };
 
@@ -255,7 +252,6 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      }
       const content = d.candidates[0].content.parts[0].text;
       if (shouldLogFullResponse) {
-        console.log('[AI FULL RESPONSE][gemini]', content);
       }
       return { content, usage: d.usageMetadata, resolvedModel: d.modelVersion || d.model || model, rateInfo: { provider: 'gemini' } };
 
@@ -285,7 +281,6 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      const content = extractOpenRouterText(d);
      if (!content) throw new Error(t('ai.error.openrouterNoText'));
     if (shouldLogFullResponse) {
-      console.log('[AI FULL RESPONSE][openrouter]', content);
     }
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo: { provider: 'openrouter' } };
   }
