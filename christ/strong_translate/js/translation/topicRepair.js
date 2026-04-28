@@ -80,12 +80,11 @@ function updateTopicRepairModalUI() {
     return;
   }
   const vis = getTopicRepairModalVisibleTasks(state);
-  console.log('[DEBUG] updateTopicRepairModalUI: visible tasks count:', vis.length, 'paused:', state.paused, 'topicRepairState.paused:', topicRepairState.paused);
   const done = vis.filter(t => t.status === 'done').length;
   const running = vis.filter(t => t.status === 'running').length;
   const waiting = vis.filter(t => t.status === 'waiting').length;
   const failed = vis.filter(t => t.status === 'failed').length;
-  console.log('[DEBUG] tasks status — done:', done, 'running:', running, 'waiting:', waiting, 'failed:', failed);
+  console.log('[DEBUG] updateTopicRepairModalUI: visible tasks', { total: vis.length, done, running, waiting, failed, paused: state.paused, topicRepairStatePaused: topicRepairState.paused });
   const statusEl = document.getElementById('topicRepairStatus');
   const idleHint = (state.repairStrategy === 'sequential' && !state.sequentialEverStarted && waiting > 0)
     ? t('topicRepair.status.waitingToStart')
@@ -197,12 +196,10 @@ function updateTopicRepairModalUI() {
 }
 
 function buildTopicRepairTasks(keys) {
-  console.log('[DEBUG] buildTopicRepairTasks for keys:', keys);
   const tasks = [];
   for (const key of keys) {
-    const t = state.translated[key] || {};
-    const missing = getMissingTopicsForRepair(t);
-    console.log('[DEBUG] key:', key, 'missing topics:', missing);
+    const entry = state.translated[key] || {};
+    const missing = getMissingTopicsForRepair(entry);
     for (const topicId of missing) {
       tasks.push({
         key,
@@ -210,21 +207,20 @@ function buildTopicRepairTasks(keys) {
         status: 'waiting',
         checked: true,
         includeBulk: true,
-        currentValue: String(t[topicId] || '').trim(),
+        currentValue: String(entry[topicId] || '').trim(),
         sourceValue: getTopicSourceTextForPreview(key, topicId),
         candidateValue: '',
         provider: '',
         error: '',
         specialistaInRaw: false,
         specialistaDecision: '',
-        specialistaPreviousValue: String(t.specialista || '').trim(),
+        specialistaPreviousValue: String(entry.specialista || '').trim(),
         specialistaCandidateValue: '',
         detectedTopics: [],
         rawHeaderTopics: []
       });
     }
   }
-  console.log('[DEBUG] total tasks created:', tasks.length, tasks.map(t => ({ key: t.key, topicId: t.topicId })));
   return tasks;
 }
     for (const topicId of missing) {
@@ -377,7 +373,7 @@ function renderTopicRepairModal() {
 function startTopicRepairFlow(keys) {
   console.log('[DEBUG] startTopicRepairFlow with keys:', keys.length, keys);
   const tasks = buildTopicRepairTasks(keys);
-  console.log('[DEBUG] built tasks:', tasks.length, tasks.map(t => ({ key: t.key, topicId: t.topicId, status: t.status })));
+  console.log('[DEBUG] built tasks count:', tasks.length, tasks.map(t => ({ key: t.key, topicId: t.topicId })));
   if (!tasks.length) {
     showToast(t('toast.topicRepair.noEligible'));
     return;
@@ -385,6 +381,7 @@ function startTopicRepairFlow(keys) {
   // Reset bulk filters to show all topics for new flow
   state.bulkTopicId = 'all';
   state.bulkListTopicFilter = defaultBulkListTopicFilter();
+  console.log('[DEBUG] reset filters: bulkTopicId=all, bulkListTopicFilter:', state.bulkListTopicFilter);
   // Reset strategy and paused state (top-level)
   state.repairStrategy = 'sequential';
   state.paused = true;
@@ -785,6 +782,7 @@ function applyTopicRepairSelected() {
     }
   }
   syncTopicRepairMinimizeBusyIndicator();
+  console.log('[DEBUG] applyTopicRepairSelected done');
 }
 
 function closeTopicRepairModalOnly() {
