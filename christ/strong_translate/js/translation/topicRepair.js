@@ -444,9 +444,6 @@ async function processTopicRepairQueue() {
           const raw = await callAIWithRetry(prov, apiKey, model, messages);
           const rawText = String(raw?.content || '').trim();
           log(t('topicRepair.log.rawRepairPrinted', { key: nextTask.key, topic: nextTask.topicId }));
-          console.groupCollapsed(`🤖 RAW AI oprava ${nextTask.key}.${nextTask.topicId} (${prov}/${model})`);
-          console.log(rawText || t('topicRepair.log.emptyResponse'));
-          console.groupEnd();
 
           // Kontrola dalších témat: zobraz jen skutečně označená pole v RAW odpovědi (striktní parser).
           state.translated[nextTask.key] = state.translated[nextTask.key] || {};
@@ -1015,9 +1012,6 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
 
     const rawText = String(raw?.content || '').trim();
     log(t('topicRepair.log.rawBatchPrinted', { topic: topicId }));
-    console.groupCollapsed(`🤖 RAW AI batch oprava ${topicId} (${prov}/${model})`);
-    console.log(rawText || t('topicRepair.log.emptyResponse'));
-    console.groupEnd();
 
     const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
     for (const key of batchKeys) {
@@ -1297,9 +1291,6 @@ async function runTopicPromptAI() {
     resultInput.value = rawText;
     log(t('topicRepair.log.topicTranslationEngine', { engine: getTranslationEngineLabel(raw, prov, model) }));
     log(t('topicRepair.log.rawTopicPrinted', { key: state.topicPromptState.key, topic: state.topicPromptState.topicId }));
-    console.groupCollapsed(`🤖 RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}`);
-    console.log(rawText || t('topicRepair.log.emptyResponse'));
-    console.groupEnd();
   } catch (e) {
     logError('runTopicPromptAI', e, { key: state.topicPromptState.key, topic: state.topicPromptState.topicId });
     showToast(t('toast.error.withMessage', { message: e.message }));

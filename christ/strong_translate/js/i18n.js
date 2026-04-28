@@ -242,7 +242,6 @@ export function validateUiMessages(messages) {
     const dict = messages[lang] || {};
     const missing = baseKeys.filter(key => !(key in dict));
     if (missing.length) {
-      console.warn(`[i18n] Missing keys in "${lang}":`, missing);
     }
   }
 }
@@ -255,21 +254,18 @@ export function loadUiMessages(force = false) {
     try {
       loaded[DEFAULT_UI_LANG] = await fetchUiDictionary(DEFAULT_UI_LANG);
     } catch (err) {
-      console.warn('[i18n] Failed loading default UI dictionary, using inline fallback:', err);
       loaded[DEFAULT_UI_LANG] = fallback[DEFAULT_UI_LANG] || {};
     }
     await Promise.all(Array.from(UI_LANGS).filter(lang => lang !== DEFAULT_UI_LANG).map(async lang => {
       try {
         loaded[lang] = await fetchUiDictionary(lang);
       } catch (err) {
-        console.warn(`[i18n] Failed loading "${lang}" dictionary, using fallback:`, err);
         loaded[lang] = fallback[lang] || {};
       }
     }));
     try {
       await mergePromptPacksIntoLoaded(loaded);
     } catch (err) {
-      console.warn('[i18n] Failed merging prompt packs:', err);
     }
     UI_MESSAGES = loaded;
     validateUiMessages(UI_MESSAGES);
