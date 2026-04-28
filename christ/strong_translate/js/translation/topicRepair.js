@@ -194,6 +194,10 @@ function buildTopicRepairTasks(keys) {
   for (const key of keys) {
     const t = state.translated[key] || {};
     const missing = getMissingTopicsForRepair(t);
+    // Debug log
+    if (window.DEBUG_TOPIC_REPAIR) {
+      console.log('TopicRepair build:', key, 'translated:', t, 'missing:', missing);
+    }
     for (const topicId of missing) {
       tasks.push({
         key,
@@ -345,6 +349,12 @@ function startTopicRepairFlow(keys) {
     showToast(t('toast.topicRepair.noEligible'));
     return;
   }
+  // Reset bulk filters to show all topics for new flow
+  state.bulkTopicId = 'all';
+  state.bulkListTopicFilter = defaultBulkListTopicFilter();
+  // Reset strategy and paused state (top-level)
+  state.repairStrategy = 'sequential';
+  state.paused = true;
   state.topicRepairState = {
     tasks,
     paused: true,
@@ -719,20 +729,22 @@ function defaultBulkListTopicFilter() {
 }
 
 function getTopicRepairModalVisibleTasks(state) {
-  if (!state || !Array.isArray(state.tasks)) return [];
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState || !Array.isArray(topicRepairState.tasks)) return [];
   const bid = state.bulkTopicId || 'all';
   if (bid === 'all') {
     const m = state.bulkListTopicFilter || defaultBulkListTopicFilter();
-    return state.tasks.filter(t => m[t.topicId] !== false);
+    return topicRepairState.tasks.filter(t => m[t.topicId] !== false);
   }
-  return state.tasks.filter(t => t.topicId === bid);
+  return topicRepairState.tasks.filter(t => t.topicId === bid);
 }
 
 /** Další čekající úloha v pořadí `topicRepairState.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
 function findNextTopicRepairWaitingTask(state) {
-  if (!state || !Array.isArray(state.tasks)) return null;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState || !Array.isArray(topicRepairState.tasks)) return null;
   const vset = new Set(getTopicRepairModalVisibleTasks(state));
-  return state.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
+  return topicRepairState.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
 }
 
 const TOPIC_REPAIR_BATCH_PROMPT_STORAGE_PREFIX = 'strong_topic_repair_batch_prompt_v1_';
@@ -976,7 +988,7 @@ function initTopicRepairBulkRunInputs() {
 
 /** Jedno téma — vnitřní smyčka dávek (režim „Vše“ i jedno téma z editoru). */
 async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs) {
-  const tasks = state.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
+  const tasks = state.topicRepairState.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
   const picked = onlyFailed
     ? tasks.filter(t => t.status === 'failed' || !hasMeaningfulValue(t.candidateValue))
     : tasks;
@@ -1013,10 +1025,10 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
     const rawText = String(raw?.content || '').trim();
     log(t('topicRepair.log.rawBatchPrinted', { topic: topicId }));
 
-    const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
-    for (const key of batchKeys) {
-      const task = state.tasks.find(t => t.key === key && t.topicId === topicId);
-      if (!task) continue;
+     const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
+     for (const key of batchKeys) {
+       const task = state.topicRepairState.tasks.find(t => t.key === key && t.topicId === topicId);
+       if (!task) continue;
       const val = String(parsedMap[key] || '').trim();
       if (hasMeaningfulValue(val)) {
         task.candidateValue = val;
