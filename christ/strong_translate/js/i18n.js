@@ -4,7 +4,8 @@ export const UI_LANG_KEY = 'strong_ui_lang';
 export const DEFAULT_UI_LANG = 'cs';
 export const UI_LANGS = new Set([
   'cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru',
-  'da', 'fi', 'hu', 'nl', 'no', 'ro', 'sv', 'ar', 'el', 'tr', 'zh-cn'
+  'da', 'fi', 'hu', 'nl', 'no', 'ro', 'sv', 'ar', 'el', 'tr', 'zh-cn',
+  'he', 'ja', 'ko'
 ]);
 const FIXED_EN_KEYS = new Set([
   'detail.label.definitionEn',
@@ -121,6 +122,15 @@ export const INLINE_UI_MESSAGES = {
   },
   'zh-cn': {
     'toast.error.withMessage': '✗ 错误: {message}'
+  },
+  he: {
+    'toast.error.withMessage': '✗ Error: {message}'
+  },
+  ja: {
+    'toast.error.withMessage': '✗ Error: {message}'
+  },
+  ko: {
+    'toast.error.withMessage': '✗ Error: {message}'
   }
 };
 
