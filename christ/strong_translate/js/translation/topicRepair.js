@@ -1,6 +1,7 @@
 import { PROVIDERS } from '../config.js';
 import { isSideFallbackAborted, sleepMsWithAbort } from '../ai/fallback.js';
 import { hasMeaningfulValue, isDefinitionLowQuality, isDefinitionLikelyEnglish } from './utils.js';
+import { sleepMs } from '../utils.js';
 import { getResolvedSystemMessage, getResolvedDefaultPrompt } from '../aiPromptsResolve.js';
 
 export function createTopicRepairApi(deps) {
@@ -9,7 +10,7 @@ export function createTopicRepairApi(deps) {
     log, logError,
     showToast,
     saveProgress,
-    renderList, renderDetail, updateStats,
+    renderList, renderDetail, updateStats, updateFailedCount,
     TOPIC_LABELS, TOPIC_PROMPT_PRESET_MAP,
     callAIWithRetry,
     getPipelineModelForProvider, getCurrentApiKey,
@@ -17,6 +18,7 @@ export function createTopicRepairApi(deps) {
     parseWithOpenRouterNormalization, applyFallbacksToParsedMap,
     isAutoProviderEnabled,
     resolveProviderForInteractiveAction,
+    resolveMainBatchProvider,
     getFailedTopicsForFallback, getMissingTopicsForRepair,
     cloneTranslationTopicFields, shouldReplaceTopicValue,
     getProviderCooldownLeftSec,
@@ -421,7 +423,7 @@ async function processTopicRepairQueue() {
     while (state.topicRepairState && !state.topicRepairState.closed) {
       if (state.topicRepairState.repairStrategy !== 'sequential') break;
       if (state.topicRepairState.paused) {
-        await sleep(350);
+        await sleepMs(350);
         continue;
       }
       const nextTask = findNextTopicRepairWaitingTask(state.topicRepairState);
@@ -431,7 +433,7 @@ async function processTopicRepairQueue() {
         showToast(t('toast.topicRepair.enableProvider'));
         state.topicRepairState.paused = true;
         updateTopicRepairModalUI();
-        await sleep(500);
+        await sleepMs(500);
         continue;
       }
       nextTask.status = 'running';
@@ -553,7 +555,7 @@ async function processTopicRepairQueue() {
       }
       updateTopicRepairModalUI();
       saveProgress();
-      await sleep(80);
+      await sleepMsMs(80);
     }
     updateTopicRepairModalUI();
     if (state.topicRepairState && !state.topicRepairState.closed) {
@@ -945,7 +947,7 @@ async function waitTopicRepairSequentialIdle(maxMs = 60000) {
     const running = !!state.topicRepairState?.tasks?.some(t => t.status === 'running');
     const current = !!state.topicRepairState?.currentTask;
     if (!running && !current) return true;
-    await sleep(120);
+    await sleepMsMs(120);
   }
   return false;
 }
@@ -1053,7 +1055,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
       const stopAt = Date.now() + Math.max(0, interval) * 1000;
       while (Date.now() < stopAt) {
         if (abortVersion !== Number(state.topicRepairBulkAbortVersion || 0)) break;
-        await sleep(250);
+        await sleepMsMs(250);
       }
     }
   }
@@ -1122,7 +1124,7 @@ async function runTopicRepairBulkTranslation() {
         }
         const res = await runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs);
         if (res.count > 0) ranAny = true;
-        if (ti < topicsToRun.length - 1 && iv0 > 0) await sleep(iv0 * 1000);
+        if (ti < topicsToRun.length - 1 && iv0 > 0) await sleepMs(iv0 * 1000);
       }
       showToast(ranAny ? t('topicRepair.bulkAllDone', { count: topicsToRun.length }) : t('topicRepair.bulkAllNone'));
     } else {
@@ -1421,33 +1423,33 @@ function countBracketRefs(text) {
 }
 
 function scoreTopicRepairText(topicId, text) {
-  const t = String(text || '').trim();
-  if (!hasMeaningfulValue(t)) return { score: 0, notes: [t('topicRepair.analysis.note.empty')] };
+ const textStr = String(text || '').trim();
+  if (!hasMeaningfulValue(textStr)) return { score: 0, notes: [t('topicRepair.analysis.note.empty')] };
   const notes = [];
   let score = 0;
 
   if (topicId === 'definice') {
-    const len = t.length;
+    const len = textStr.length;
     score += Math.min(6, Math.floor(len / 120));
-    score += Math.min(3, countBracketRefs(t));
-    score += Math.min(3, Math.floor(countCzDiacritics(t) / 6));
-    if (isDefinitionLowQuality(t)) {
+    score += Math.min(3, countBracketRefs(textStr));
+    score += Math.min(3, Math.floor(countCzDiacritics(textStr) / 6));
+    if (isDefinitionLowQuality(textStr)) {
       score -= 8;
       notes.push(t('topicRepair.analysis.note.definitionLowQuality'));
     }
-    if (isDefinitionLikelyEnglish(t)) {
+    if (isDefinitionLikelyEnglish(textStr)) {
       score -= 6;
       notes.push(t('topicRepair.analysis.note.definitionEnglishTone'));
     }
-    score -= Math.min(4, countEnglishNoiseWords(t));
+    score -= Math.min(4, countEnglishNoiseWords(textStr));
     return { score, notes };
   }
 
   if (topicId === 'vyznam') {
-    const words = t.split(/\s+/).filter(Boolean).length;
+    const words = textStr.split(/\s+/).filter(Boolean).length;
     score += Math.min(4, words);
-    score += Math.min(3, Math.floor(countCzDiacritics(t) / 2));
-    score -= Math.min(4, countEnglishNoiseWords(t));
+    score += Math.min(3, Math.floor(countCzDiacritics(textStr) / 2));
+    score -= Math.min(4, countEnglishNoiseWords(textStr));
     if (words > 14) {
       score -= 2;
       notes.push(t('topicRepair.analysis.note.meaningTooLong'));
@@ -1456,40 +1458,40 @@ function scoreTopicRepairText(topicId, text) {
   }
 
   if (topicId === 'kjv') {
-    score += Math.min(5, Math.floor(t.length / 40));
-    score += Math.min(3, countBracketRefs(t));
-    score += Math.min(3, Math.floor(countCzDiacritics(t) / 4));
-    score -= Math.min(5, countEnglishNoiseWords(t));
+    score += Math.min(5, Math.floor(textStr.length / 40));
+    score += Math.min(3, countBracketRefs(textStr));
+    score += Math.min(3, Math.floor(countCzDiacritics(textStr) / 4));
+    score -= Math.min(5, countEnglishNoiseWords(textStr));
     return { score, notes };
   }
 
   if (topicId === 'pouziti') {
-    const refs = countBracketRefs(t);
+    const refs = countBracketRefs(textStr);
     score += Math.min(6, refs * 2);
-    score += Math.min(3, Math.floor(t.length / 80));
-    score += Math.min(2, Math.floor(countCzDiacritics(t) / 6));
-    score -= Math.min(4, countEnglishNoiseWords(t));
+    score += Math.min(3, Math.floor(textStr.length / 80));
+    score += Math.min(2, Math.floor(countCzDiacritics(textStr) / 6));
+    score -= Math.min(4, countEnglishNoiseWords(textStr));
     if (refs === 0) notes.push(t('topicRepair.analysis.note.usageFewRefs'));
     return { score, notes };
   }
 
   if (topicId === 'puvod') {
-    score += Math.min(5, Math.floor(t.length / 60));
-    score += Math.min(3, Math.floor(countCzDiacritics(t) / 5));
-    score -= Math.min(4, countEnglishNoiseWords(t));
-    if (!/(řec|hebr|lat|sém|indoev|kořen|odvoz)/i.test(t)) notes.push(t('topicRepair.analysis.note.originMissingContext'));
+    score += Math.min(5, Math.floor(textStr.length / 60));
+    score += Math.min(3, Math.floor(countCzDiacritics(textStr) / 5));
+    score -= Math.min(4, countEnglishNoiseWords(textStr));
+    if (!/(řec|hebr|lat|sém|indoev|kořen|odvoz)/i.test(textStr)) notes.push(t('topicRepair.analysis.note.originMissingContext'));
     return { score, notes };
   }
 
   if (topicId === 'specialista') {
-    const s = getSpecialistaQualityScore(t);
+    const s = getSpecialistaQualityScore(textStr);
     score += s;
     notes.push(t('topicRepair.analysis.note.specialistScore', { score: s }));
     return { score, notes };
   }
 
-  score += Math.min(6, Math.floor(t.length / 80));
-  score -= Math.min(4, countEnglishNoiseWords(t));
+  score += Math.min(6, Math.floor(textStr.length / 80));
+  score -= Math.min(4, countEnglishNoiseWords(textStr));
   return { score, notes };
 }
 

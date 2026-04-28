@@ -1746,7 +1746,7 @@ const topicRepairApi = createTopicRepairApi({
   log, logError,
   showToast,
   saveProgress: (...a) => saveProgress(...a),
-  renderList, renderDetail, updateStats,
+  renderList, renderDetail, updateStats, updateFailedCount,
   TOPIC_LABELS, TOPIC_PROMPT_PRESET_MAP,
   callAIWithRetry,
   getPipelineModelForProvider: (...a) => getPipelineModelForProvider(...a),
