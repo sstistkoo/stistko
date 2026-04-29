@@ -75,12 +75,16 @@ function updateTopicRepairProviderStatus() {
 
 function updateTopicRepairModalUI() {
   const topicRepairState = state.topicRepairState;
-  if (!topicRepairState) return;
+  if (!topicRepairState) {
+    console.log('[DEBUG] updateTopicRepairModalUI: no topicRepairState');
+    return;
+  }
   const vis = getTopicRepairModalVisibleTasks(state);
   const done = vis.filter(t => t.status === 'done').length;
   const running = vis.filter(t => t.status === 'running').length;
   const waiting = vis.filter(t => t.status === 'waiting').length;
   const failed = vis.filter(t => t.status === 'failed').length;
+  console.log('[DEBUG] updateTopicRepairModalUI: visible tasks', { total: vis.length, done, running, waiting, failed, paused: state.paused, topicRepairStatePaused: topicRepairState.paused });
   const statusEl = document.getElementById('topicRepairStatus');
   const idleHint = (state.repairStrategy === 'sequential' && !state.sequentialEverStarted && waiting > 0)
     ? t('topicRepair.status.waitingToStart')
@@ -194,12 +198,31 @@ function updateTopicRepairModalUI() {
 function buildTopicRepairTasks(keys) {
   const tasks = [];
   for (const key of keys) {
-    const t = state.translated[key] || {};
-    const missing = getMissingTopicsForRepair(t);
-    // Debug log
-    if (window.DEBUG_TOPIC_REPAIR) {
-      console.log('TopicRepair build:', key, 'translated:', t, 'missing:', missing);
+    const entry = state.translated[key] || {};
+    const missing = getMissingTopicsForRepair(entry);
+    for (const topicId of missing) {
+      tasks.push({
+        key,
+        topicId,
+        status: 'waiting',
+        checked: true,
+        includeBulk: true,
+        currentValue: String(entry[topicId] || '').trim(),
+        sourceValue: getTopicSourceTextForPreview(key, topicId),
+        candidateValue: '',
+        provider: '',
+        error: '',
+        specialistaInRaw: false,
+        specialistaDecision: '',
+        specialistaPreviousValue: String(entry.specialista || '').trim(),
+        specialistaCandidateValue: '',
+        detectedTopics: [],
+        rawHeaderTopics: []
+      });
     }
+  }
+  return tasks;
+}
     for (const topicId of missing) {
       tasks.push({
         key,
@@ -221,6 +244,7 @@ function buildTopicRepairTasks(keys) {
       });
     }
   }
+  console.log('[DEBUG] total tasks created:', tasks.length);
   return tasks;
 }
 
@@ -236,6 +260,7 @@ function applyTopicRepairProviderCheckboxes() {
 }
 
 function renderTopicRepairModal() {
+  console.log('[DEBUG] renderTopicRepairModal called');
   const topicRepairState = state.topicRepairState;
   if (!topicRepairState) return;
   if (!state.bulkListTopicFilter) state.bulkListTopicFilter = defaultBulkListTopicFilter();
@@ -346,7 +371,9 @@ function renderTopicRepairModal() {
 }
 
 function startTopicRepairFlow(keys) {
+  console.log('[DEBUG] startTopicRepairFlow with keys:', keys.length, keys);
   const tasks = buildTopicRepairTasks(keys);
+  console.log('[DEBUG] built tasks count:', tasks.length, tasks.map(t => ({ key: t.key, topicId: t.topicId })));
   if (!tasks.length) {
     showToast(t('toast.topicRepair.noEligible'));
     return;
@@ -354,6 +381,7 @@ function startTopicRepairFlow(keys) {
   // Reset bulk filters to show all topics for new flow
   state.bulkTopicId = 'all';
   state.bulkListTopicFilter = defaultBulkListTopicFilter();
+  console.log('[DEBUG] reset filters: bulkTopicId=all, bulkListTopicFilter:', state.bulkListTopicFilter);
   // Reset strategy and paused state (top-level)
   state.repairStrategy = 'sequential';
   state.paused = true;
@@ -384,13 +412,18 @@ function setTopicRepairStrategy(strategy) {
   const topicRepairState = state.topicRepairState;
   if (!topicRepairState) return;
   const busy = topicRepairState.tasks.some(t => t.status === 'running') || !!topicRepairState.currentTask || state.topicRepairBulkRunning;
+  console.log('[DEBUG] setTopicRepairStrategy:', strategy, 'busy:', busy);
   if (busy) {
     showToast(t('toast.topicRepair.modeLocked'));
     updateTopicRepairModalUI();
     return;
   }
   state.repairStrategy = strategy === 'bulk' ? 'bulk' : 'sequential';
-  if (state.repairStrategy === 'bulk') state.paused = true;
+  if (state.repairStrategy === 'bulk') {
+    state.paused = true;
+    state.topicRepairState.paused = true;
+  }
+  console.log('[DEBUG] strategy set to:', state.repairStrategy, 'paused:', state.paused);
   const det = document.getElementById('topicRepairBulkDetails');
   if (det) det.open = state.repairStrategy === 'bulk';
   const bulkHint = document.getElementById('topicRepairBulkStrategyHint');
@@ -399,35 +432,72 @@ function setTopicRepairStrategy(strategy) {
 }
 
 function startTopicRepairSequentialWorker() {
+  console.log('[DEBUG] === startTopicRepairSequentialWorker ===');
   const topicRepairState = state.topicRepairState;
-  if (!state || state.repairStrategy !== 'sequential') return;
+  if (!state || state.repairStrategy !== 'sequential') {
+    console.log('[DEBUG] exit: state missing or strategy not sequential');
+    return;
+  }
   if (!findNextTopicRepairWaitingTask(state)) {
+    console.log('[DEBUG] exit: no waiting tasks found');
     showToast(t('toast.topicRepair.queueEmpty'));
     return;
   }
   const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => topicRepairState.providerEnabled[p]);
   if (!enabledProviders.length) {
+    console.log('[DEBUG] exit: no enabled providers');
     showToast(t('toast.topicRepair.enableProvider'));
     return;
   }
   state.sequentialEverStarted = true;
   state.paused = false;
+  state.topicRepairState.paused = false;
+  console.log('[DEBUG] starting worker, sequentialEverStarted=true, paused=false');
+  updateTopicRepairModalUI();
+  if (!state.topicRepairWorkerRunning) processTopicRepairQueue();
+}
+  if (!findNextTopicRepairWaitingTask(state)) {
+    console.log('[DEBUG] exit: no waiting tasks');
+    showToast(t('toast.topicRepair.queueEmpty'));
+    return;
+  }
+  const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => topicRepairState.providerEnabled[p]);
+  if (!enabledProviders.length) {
+    console.log('[DEBUG] exit: no enabled providers');
+    showToast(t('toast.topicRepair.enableProvider'));
+    return;
+  }
+  state.sequentialEverStarted = true;
+  state.paused = false;
+  state.topicRepairState.paused = false;
+  console.log('[DEBUG] starting worker, paused=false');
   updateTopicRepairModalUI();
   if (!state.topicRepairWorkerRunning) processTopicRepairQueue();
 }
 
 async function processTopicRepairQueue() {
+  console.log('[DEBUG] processTopicRepairQueue entered, workerRunning:', state.topicRepairWorkerRunning);
   if (!state.topicRepairState || state.topicRepairWorkerRunning) return;
   state.topicRepairWorkerRunning = true;
   try {
+    console.log('[DEBUG] processTopicRepairQueue: starting while loop');
     while (state.topicRepairState && !state.topicRepairState.closed) {
-      if (state.topicRepairState.repairStrategy !== 'sequential') break;
+      console.log('[DEBUG] loop iteration, repairStrategy:', state.topicRepairState.repairStrategy, 'paused:', state.topicRepairState.paused);
+      if (state.topicRepairState.repairStrategy !== 'sequential') {
+        console.log('[DEBUG] exit: not sequential');
+        break;
+      }
       if (state.topicRepairState.paused) {
+        console.log('[DEBUG] paused, sleeping 350ms');
         await sleepMs(350);
         continue;
       }
       const nextTask = findNextTopicRepairWaitingTask(state.topicRepairState);
-      if (!nextTask) break;
+      console.log('[DEBUG] nextTask:', nextTask ? { key: nextTask.key, topicId: nextTask.topicId, status: nextTask.status } : null);
+      if (!nextTask) {
+        console.log('[DEBUG] no next task, breaking loop');
+        break;
+      }
       const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => state.topicRepairState?.providerEnabled?.[p]);
       if (!enabledProviders.length) {
         showToast(t('toast.topicRepair.enableProvider'));
@@ -555,6 +625,24 @@ async function processTopicRepairQueue() {
       }
       updateTopicRepairModalUI();
       saveProgress();
+      await sleepMs(80);
+    }
+    console.log('[DEBUG] processTopicRepairQueue: loop ended, repairStrategy:', state.topicRepairState?.repairStrategy, 'closed:', state.topicRepairState?.closed);
+    updateTopicRepairModalUI();
+    if (state.topicRepairState && !state.topicRepairState.closed) {
+      const waitingVis = getTopicRepairModalVisibleTasks(state.topicRepairState).filter(t => t.status === 'waiting').length;
+      console.log('[DEBUG] waitingVis:', waitingVis);
+      if (waitingVis === 0) showToast(t('toast.topicRepair.visibleDone'));
+    }
+  } catch (e) {
+    console.error('[DEBUG] processTopicRepairQueue error:', e);
+  } finally {
+    state.topicRepairWorkerRunning = false;
+    console.log('[DEBUG] processTopicRepairQueue: finally, workerRunning set to false');
+  }
+}
+      updateTopicRepairModalUI();
+      saveProgress();
       await sleepMsMs(80);
     }
     updateTopicRepairModalUI();
@@ -584,6 +672,7 @@ function toggleTopicRepairTask(index, checked) {
 }
 
 function toggleTopicRepairRun() {
+  console.log('[DEBUG] toggleTopicRepairRun clicked');
   if (!state.topicRepairState) return;
   const topicRepairState = state.topicRepairState;
   if (state.repairStrategy !== 'sequential' || !state.sequentialEverStarted) {
@@ -601,6 +690,15 @@ function toggleTopicRepairRun() {
       console.log('[DEBUG] toggleTopicRepairRun: restarting processTopicRepairQueue (' + waiting + ' waiting)');
       processTopicRepairQueue();
     }
+  }
+}
+=======
+  console.log('[DEBUG] toggleTopicRepairRun: paused now', state.paused);
+  updateTopicRepairModalUI();
+  if (!state.paused && !state.topicRepairWorkerRunning) {
+    console.log('[DEBUG] toggleTopicRepairRun: restarting processTopicRepairQueue');
+    processTopicRepairQueue();
+>>>>>>> 9c7356642803744b227a6ec45a645894ba0d8ae1
   }
 }
 
@@ -656,6 +754,7 @@ function setTopicRepairDetectedTopicDecision(taskIndex, topicId, decision) {
 }
 
 function applyTopicRepairSelected() {
+  console.log('[DEBUG] applyTopicRepairSelected called');
   const topicRepairState = state.topicRepairState;
   if (!topicRepairState) return;
   let applied = 0;
@@ -665,6 +764,7 @@ function applyTopicRepairSelected() {
     state.translated[task.key][task.topicId] = task.candidateValue;
     applied++;
   }
+  console.log('[DEBUG] applyTopicRepairSelected: applied', applied);
   if (applied > 0) {
     saveProgress();
     renderList();
@@ -704,6 +804,7 @@ function applyTopicRepairSelected() {
     }
   }
   syncTopicRepairMinimizeBusyIndicator();
+  console.log('[DEBUG] applyTopicRepairSelected done');
 }
 
 function closeTopicRepairModalOnly() {
@@ -745,7 +846,9 @@ const TOPIC_BATCH_PROMPT_PRESET_MAP = {
 const TOPIC_REPAIR_BULK_TOPIC_ORDER = ['definice', 'vyznam', 'kjv', 'pouziti', 'puvod', 'specialista'];
 
 function defaultBulkListTopicFilter() {
-  return { definice: true, vyznam: true, kjv: true, pouziti: true, puvod: true, specialista: true };
+  const filter = { definice: true, vyznam: true, kjv: true, pouziti: true, puvod: true, specialista: true };
+  console.log('[DEBUG] defaultBulkListTopicFilter:', filter);
+  return filter;
 }
 
 function getTopicRepairModalVisibleTasks(state) {
@@ -754,17 +857,29 @@ function getTopicRepairModalVisibleTasks(state) {
   const bid = state.bulkTopicId || 'all';
   if (bid === 'all') {
     const m = state.bulkListTopicFilter || defaultBulkListTopicFilter();
-    return topicRepairState.tasks.filter(t => m[t.topicId] !== false);
+    const filtered = topicRepairState.tasks.filter(t => m[t.topicId] !== false);
+    console.log('[DEBUG] getTopicRepairModalVisibleTasks: bulkTopicId=all, filter:', m, 'result count:', filtered.length);
+    return filtered;
   }
-  return topicRepairState.tasks.filter(t => t.topicId === bid);
+  const filtered = topicRepairState.tasks.filter(t => t.topicId === bid);
+  console.log('[DEBUG] getTopicRepairModalVisibleTasks: bulkTopicId=', bid, 'result count:', filtered.length);
+  return filtered;
 }
 
 /** Další čekající úloha v pořadí `topicRepairState.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
 function findNextTopicRepairWaitingTask(state) {
   const topicRepairState = state.topicRepairState;
-  if (!topicRepairState || !Array.isArray(topicRepairState.tasks)) return null;
+  if (!topicRepairState || !Array.isArray(topicRepairState.tasks)) {
+    console.log('[DEBUG] findNextTopicRepairWaitingTask: no state or tasks');
+    return null;
+  }
   const vset = new Set(getTopicRepairModalVisibleTasks(state));
-  return topicRepairState.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
+  const waitingTasks = topicRepairState.tasks.filter(t => t.status === 'waiting' && vset.has(t));
+  console.log('[DEBUG] findNextTopicRepairWaitingTask: visible filter count:', vset.size, 'waiting matching filter:', waitingTasks.length);
+  if (waitingTasks.length > 0) {
+    console.log('[DEBUG] next task:', waitingTasks[0].key, waitingTasks[0].topicId);
+  }
+  return waitingTasks[0] || null;
 }
 
 const TOPIC_REPAIR_BATCH_PROMPT_STORAGE_PREFIX = 'strong_topic_repair_batch_prompt_v1_';
@@ -960,13 +1075,20 @@ function syncTopicRepairTaskSpecialistaFromRaw(task, rawText) {
 }
 
 async function waitTopicRepairSequentialIdle(maxMs = 60000) {
+  console.log('[DEBUG] waitTopicRepairSequentialIdle start');
   const start = Date.now();
   while (Date.now() - start < maxMs) {
     const running = !!state.topicRepairState?.tasks?.some(t => t.status === 'running');
     const current = !!state.topicRepairState?.currentTask;
-    if (!running && !current) return true;
-    await sleepMsMs(120);
+    if (!running && !current) {
+      console.log('[DEBUG] waitTopicRepairSequentialIdle: idle after', Date.now() - start, 'ms');
+      return true;
+    }
+    await sleepMs(120);
   }
+  console.log('[DEBUG] waitTopicRepairSequentialIdle: timeout after', maxMs, 'ms');
+  return false;
+}
   return false;
 }
 
@@ -1164,6 +1286,7 @@ async function runTopicRepairBulkTranslation() {
     }
   } finally {
     state.paused = wasPaused;
+    if (state.topicRepairState) state.topicRepairState.paused = wasPaused;
     state.topicRepairBulkRunning = false;
     if (bulkBtn) {
       bulkBtn.disabled = false;
