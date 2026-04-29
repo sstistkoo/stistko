@@ -1,7 +1,0 @@
-# Live report testu modelů
-# Tento soubor je určen pro průběžný přepis reportu z modalu "Test modelů".
-#
-# Postup:
-# 1) V modalu klikni na "Napojit TXT log".
-# 2) Vyber právě tento soubor: model_test_live_report.txt.
-# 3) Spusť test provideru — obsah se bude průběžně přepisovat.
