@@ -562,10 +562,19 @@ async function processTopicRepairQueue() {
       const waitingVis = getTopicRepairModalVisibleTasks(state.topicRepairState).filter(t => t.status === 'waiting').length;
       if (waitingVis === 0) showToast(t('toast.topicRepair.visibleDone'));
     }
-  } finally {
-    state.topicRepairWorkerRunning = false;
+    } finally {
+      state.topicRepairWorkerRunning = false;
+    }
+
+    // Pokud nejsou uzavřeni a jsou ještě čekající tasky, restartujeme worker
+    if (state.topicRepairState && !state.topicRepairState.closed) {
+      const waiting = getTopicRepairModalVisibleTasks(state.topicRepairState).filter(t => t.status === 'waiting').length;
+      if (waiting > 0 && !state.topicRepairState.paused) {
+        console.log('[DEBUG] processTopicRepairQueue: ' + waiting + ' waiting tasks remain, restarting...');
+        setTimeout(() => processTopicRepairQueue(), 100);
+      }
+    }
   }
-}
 
 function toggleTopicRepairTask(index, checked) {
   const topicRepairState = state.topicRepairState;
@@ -582,8 +591,17 @@ function toggleTopicRepairRun() {
     return;
   }
   state.paused = !state.paused;
+  topicRepairState.paused = state.paused;
+  console.log('[DEBUG] toggleTopicRepairRun: paused now', state.paused, 'workerRunning:', state.topicRepairWorkerRunning);
   updateTopicRepairModalUI();
-  if (!state.paused && !state.topicRepairWorkerRunning) processTopicRepairQueue();
+  
+  if (!state.paused) {
+    const waiting = getTopicRepairModalVisibleTasks(state.topicRepairState).filter(t => t.status === 'waiting').length;
+    if (!state.topicRepairWorkerRunning && waiting > 0) {
+      console.log('[DEBUG] toggleTopicRepairRun: restarting processTopicRepairQueue (' + waiting + ' waiting)');
+      processTopicRepairQueue();
+    }
+  }
 }
 
 function shouldAutoAcceptDetectedTopic(topicId, previousValue, candidateValue) {
