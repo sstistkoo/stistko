@@ -757,6 +757,10 @@ function parseContourGCode(text) {
 export function openCamSimulator(initialContour) {
   injectCSS();
 
+  // Mobil: zavřít pravý panel CAD, aby byl po návratu z CAM zavřený
+  document.getElementById("sidebar")?.classList.remove("mobile-open");
+  document.getElementById("sidebarOverlay")?.classList.remove("active");
+
   // ── Build HTML ──
   const bodyHTML = `
 <div class="cam-sim-root">
